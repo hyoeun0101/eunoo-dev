@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Member {
+
     private Email email;
 
     private String nickname;
@@ -21,7 +22,7 @@ public class Member {
     private Member() {
     }
 
-    public static Member create(MemberCreateRequest request, PasswordEncoder passwordEncoder) {
+    public static Member register(MemberRegisterRequest request, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
         member.email = new Email(request.email());

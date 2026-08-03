@@ -25,18 +25,18 @@ class MemberTest {
             }
         };
 
-        member = Member.create(new MemberCreateRequest("eunoo@gmail.com", "eunoo", "secret"), passwordEncoder);
+        member = Member.register(new MemberRegisterRequest("eunoo@gmail.com", "eunoo", "secret"), passwordEncoder);
     }
 
     @Test
     @DisplayName("회원을 생성하면 회원의 상태는 PENDING이다.")
-    void createMember() {
+    void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
 
     @Test
     void constructorNullCheck() {
-        assertThatThrownBy(() -> Member.create(new MemberCreateRequest(null, "eunoo", "secret"), passwordEncoder)
+        assertThatThrownBy(() -> Member.register(new MemberRegisterRequest(null, "eunoo", "secret"), passwordEncoder)
         ).isInstanceOf(NullPointerException.class);
     }
 
@@ -109,7 +109,7 @@ class MemberTest {
     @Test
     void invalidEmail() {
         assertThatThrownBy(() ->
-                Member.create(new MemberCreateRequest("invalid email", "eunoo", "secret"), passwordEncoder)
+                Member.register(new MemberRegisterRequest("invalid email", "eunoo", "secret"), passwordEncoder)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 }
