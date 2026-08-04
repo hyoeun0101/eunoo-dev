@@ -1,6 +1,8 @@
 package eunoospring.splearn.application.required;
 
+import eunoospring.splearn.domain.Email;
 import eunoospring.splearn.domain.Member;
+import java.util.Optional;
 import org.springframework.data.repository.Repository;
 
 /**
@@ -8,4 +10,6 @@ import org.springframework.data.repository.Repository;
  */
 public interface MemberRepository extends Repository<Member, Long> {
     Member save(Member member);
+
+    Optional<Member> findByEmail(Email email);
 }
