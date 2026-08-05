@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Import(SplearnTestConfiguration.class)
 @Transactional
-public record MemberRegisterTest(MemberRegister memberRegister, EntityManager em) {
+record MemberRegisterTest(MemberRegister memberRegister, EntityManager em) {
 
     @Test
     void register() {
@@ -40,8 +40,12 @@ public record MemberRegisterTest(MemberRegister memberRegister, EntityManager em
 
     @Test
     void memberRegisterRequestFail() {
-        MemberRegisterRequest request = new MemberRegisterRequest("eunoo@gmail.com", "1111", "");
+        failValidation(new MemberRegisterRequest("eunoo", "eunoo", "verysecret"));
+        failValidation(new MemberRegisterRequest("eunoo@gmail.com", "ee", "verysecret"));
+        failValidation(new MemberRegisterRequest("eunoo@gmail.com", "eunoo", "1234"));
+    }
 
+    private void failValidation(MemberRegisterRequest request) {
         assertThatThrownBy(() -> memberRegister.register(request))
                 .isInstanceOf(ConstraintViolationException.class);
     }
