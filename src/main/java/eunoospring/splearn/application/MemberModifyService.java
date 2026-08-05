@@ -1,5 +1,6 @@
 package eunoospring.splearn.application;
 
+import eunoospring.splearn.application.provided.MemberFinder;
 import eunoospring.splearn.application.provided.MemberRegister;
 import eunoospring.splearn.application.required.EmailSender;
 import eunoospring.splearn.application.required.MemberRepository;
@@ -17,7 +18,8 @@ import org.springframework.validation.annotation.Validated;
 @Transactional
 @Validated
 @RequiredArgsConstructor
-public class MemberService implements MemberRegister {
+public class MemberModifyService implements MemberRegister {
+    private final MemberFinder memberFinder;
     private final MemberRepository memberRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
@@ -39,6 +41,15 @@ public class MemberService implements MemberRegister {
         if (memberRepository.findByEmail(new Email(registerRequest.email())).isPresent()) {
             throw new DuplicationEmailException("이미 사용중인 이메일입니다: " + registerRequest.email());
         }
+    }
+
+    @Override
+    public Member activate(Long id) {
+        Member member = memberFinder.find(id);
+
+        member.activate();
+
+        return memberRepository.save(member);
     }
 
     private void sendWelcomeEmail(Member member) {
