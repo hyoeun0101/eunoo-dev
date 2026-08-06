@@ -7,6 +7,7 @@ import eunoospring.splearn.SplearnTestConfiguration;
 import eunoospring.splearn.domain.member.DuplicationEmailException;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
+import eunoospring.splearn.domain.member.MemberInfoUpdateRequest;
 import eunoospring.splearn.domain.member.MemberRegisterRequest;
 import eunoospring.splearn.domain.member.MemberStatus;
 import jakarta.persistence.EntityManager;
@@ -52,13 +53,61 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager em) {
 
     @Test
     void activate() {
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        em.flush();
-        em.clear();
+        Member member = registerMember();
 
         member = memberRegister.activate(member.getId());
         em.flush();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTVIE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
+    }
+
+    @Test
+    void deactivate() {
+        Member member = registerMember();
+
+        memberRegister.activate(member.getId());
+        em.flush();
+        em.clear();
+
+        member = memberRegister.deactivate(member.getId());
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
+    }
+
+    @Test
+    void updateInfo() {
+        Member member = registerMember();
+        memberRegister.activate(member.getId());
+        em.flush();
+        em.clear();
+
+        MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요.");
+        member = memberRegister.updateInfo(member.getId(), updateRequest);
+        em.flush();
+        em.clear();
+
+        assertThat(member.getNickname()).isEqualTo(updateRequest.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(updateRequest.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(updateRequest.introduction());
+    }
+
+    @Test
+    void updateInfoFail() {
+        Member member = registerMember();
+
+        MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요.");
+
+        assertThatThrownBy(() -> memberRegister.updateInfo(member.getId(), updateRequest))
+                .isInstanceOf(IllegalStateException.class);
+
+    }
+
+    private Member registerMember() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        em.flush();
+        em.clear();
+        return member;
     }
 }

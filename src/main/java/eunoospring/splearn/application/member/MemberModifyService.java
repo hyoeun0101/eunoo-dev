@@ -5,6 +5,7 @@ import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.application.member.required.EmailSender;
 import eunoospring.splearn.application.member.required.MemberRepository;
 import eunoospring.splearn.domain.member.DuplicationEmailException;
+import eunoospring.splearn.domain.member.MemberInfoUpdateRequest;
 import eunoospring.splearn.domain.shared.Email;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberRegisterRequest;
@@ -48,6 +49,24 @@ public class MemberModifyService implements MemberRegister {
         Member member = memberFinder.find(id);
 
         member.activate();
+
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member deactivate(Long id) {
+        Member member = memberFinder.find(id);
+
+        member.deactivate();
+
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member updateInfo(Long id, MemberInfoUpdateRequest updateRequest) {
+        Member member = memberFinder.find(id);
+
+        member.updateInfo(updateRequest);
 
         return memberRepository.save(member);
     }

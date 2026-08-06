@@ -1,6 +1,7 @@
 package eunoospring.splearn.application.member.provided;
 
 import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.domain.member.MemberInfoUpdateRequest;
 import eunoospring.splearn.domain.member.MemberRegisterRequest;
 import jakarta.validation.Valid;
 
@@ -11,4 +12,8 @@ public interface MemberRegister {
     Member register(@Valid MemberRegisterRequest registerRequest);
 
     Member activate(Long id);
+
+    Member deactivate(Long id);
+
+    Member updateInfo(Long id, @Valid MemberInfoUpdateRequest updateRequest);
 }
