@@ -4,12 +4,14 @@ import eunoospring.splearn.application.member.provided.MemberFinder;
 import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.application.member.required.EmailSender;
 import eunoospring.splearn.application.member.required.MemberRepository;
-import eunoospring.splearn.domain.member.DuplicationEmailException;
-import eunoospring.splearn.domain.member.MemberInfoUpdateRequest;
-import eunoospring.splearn.domain.shared.Email;
+import eunoospring.splearn.domain.member.exception.DuplicationEmailException;
 import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.domain.member.MemberInfoUpdateRequest;
 import eunoospring.splearn.domain.member.MemberRegisterRequest;
 import eunoospring.splearn.domain.member.PasswordEncoder;
+import eunoospring.splearn.domain.member.Profile;
+import eunoospring.splearn.domain.member.exception.DuplicationProfileException;
+import eunoospring.splearn.domain.shared.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,9 +68,22 @@ public class MemberModifyService implements MemberRegister {
     public Member updateInfo(Long id, MemberInfoUpdateRequest updateRequest) {
         Member member = memberFinder.find(id);
 
+        checkDuplicationProfile(member, updateRequest.profileAddress());
+
         member.updateInfo(updateRequest);
 
         return memberRepository.save(member);
+    }
+
+    private void checkDuplicationProfile(Member member, String profileAddress) {
+        if (profileAddress.isEmpty()) return;
+        Profile profile = member.getDetail().getProfile();
+        if (profile != null && profile.address().equals(profileAddress)) return;
+
+        // 중복 체크
+        if (memberRepository.findByProfile(new Profile(profileAddress)).isPresent()) {
+            throw new DuplicationProfileException("이미 존재하는 프로필 주소입니다.");
+        }
     }
 
     private void sendWelcomeEmail(Member member) {

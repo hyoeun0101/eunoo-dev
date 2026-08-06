@@ -4,12 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.SplearnTestConfiguration;
-import eunoospring.splearn.domain.member.DuplicationEmailException;
+import eunoospring.splearn.domain.member.exception.DuplicationEmailException;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
 import eunoospring.splearn.domain.member.MemberInfoUpdateRequest;
 import eunoospring.splearn.domain.member.MemberRegisterRequest;
 import eunoospring.splearn.domain.member.MemberStatus;
+import eunoospring.splearn.domain.member.exception.DuplicationProfileException;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -94,14 +95,22 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager em) {
     }
 
     @Test
-    void updateInfoFail() {
+    void updateInfoDuplicationProfileFail() {
         Member member = registerMember();
+        memberRegister.activate(member.getId());
+        memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요."));
+        em.flush();
+        em.clear();
 
-        MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요.");
+        Member member2 = registerMember("jun@gmail.com");
+        memberRegister.activate(member2.getId());
+        em.flush();
+        em.clear();
 
-        assertThatThrownBy(() -> memberRegister.updateInfo(member.getId(), updateRequest))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> memberRegister.updateInfo(member2.getId(), new MemberInfoUpdateRequest("jun12", "eunoo", "안녕하세요.")))
+                .isInstanceOf(DuplicationProfileException.class);
 
+        memberRegister.updateInfo(member2.getId(), new MemberInfoUpdateRequest("jun12", "", "안녕하세요."));
     }
 
     private Member registerMember() {
@@ -110,4 +119,12 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager em) {
         em.clear();
         return member;
     }
+
+    private Member registerMember(String email) {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest(email));
+        em.flush();
+        em.clear();
+        return member;
+    }
+
 }

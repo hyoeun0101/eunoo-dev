@@ -9,11 +9,11 @@ class MemberProfileTest {
     @Test
     void profile() {
         new Profile("eunoo12");
+        new Profile("");
     }
 
     @Test
     void profileFail() {
-        assertThatThrownBy(() -> new Profile("")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Profile("euno1234567890123456789012345678"))
                 .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new Profile("안녕하세요")).isInstanceOf(IllegalArgumentException.class);
@@ -26,5 +26,4 @@ class MemberProfileTest {
 
         assertThat(profile.url()).isEqualTo("@eunoo");
     }
-
 }
