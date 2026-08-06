@@ -4,13 +4,7 @@ package eunoospring.splearn.domain;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
 
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,14 +13,10 @@ import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Getter
-@ToString
+@ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends AbstractEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Embedded
     @NaturalId
     private Email email;
 
@@ -34,9 +24,7 @@ public class Member {
 
     private String passwordHash;
 
-    @Enumerated(EnumType.STRING)
     private MemberStatus status;
-
 
     public static Member register(MemberRegisterRequest request, PasswordEncoder passwordEncoder) {
         Member member = new Member();
