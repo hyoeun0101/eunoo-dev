@@ -1,4 +1,4 @@
-package eunoospring.splearn.domain.member;
+package eunoospring.splearn.domain.member.exception;
 
 public class DuplicationEmailException extends RuntimeException {
     public DuplicationEmailException(String message) {
