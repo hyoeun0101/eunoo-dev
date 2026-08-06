@@ -24,6 +24,7 @@ class MemberTest {
     @DisplayName("회원을 생성하면 회원의 상태는 PENDING이다.")
     void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
@@ -37,6 +38,7 @@ class MemberTest {
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTVIE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @Test
@@ -53,6 +55,7 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
@@ -103,5 +106,24 @@ class MemberTest {
         assertThatThrownBy(() ->
                 Member.register(createMemberRegisterRequest("invalid email"), passwordEncoder)
         ).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void updatedInfo() {
+        var request = new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요.");
+        member.activate();
+
+        member.updateInfo(request);
+
+        assertThat(member.getNickname()).isEqualTo(request.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(request.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(request.introduction());
+    }
+
+    @Test
+    void updateInfoFail() {
+        var request = new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요.");
+
+        assertThatThrownBy(() -> member.updateInfo(request)).isInstanceOf(IllegalStateException.class);
     }
 }
