@@ -13,7 +13,7 @@
         </attributes>
     </mapped-superclass>
 
-    <entity class="eunoospring.splearn.domain.Member" access="FIELD">
+    <entity class="eunoospring.splearn.domain.member.Member" access="FIELD">
         <table name="MEMBER">
             <unique-constraint name="UK_MEMBER_EMAIL_ADDRESS">
                 <column-name>email_address</column-name>
@@ -41,5 +41,7 @@
             </embedded>
         </attributes>
     </entity>
+
+    <entity class="eunoospring.splearn.domain.member.MemberDetail" access="FIELD"/>
 
 </entity-mappings>

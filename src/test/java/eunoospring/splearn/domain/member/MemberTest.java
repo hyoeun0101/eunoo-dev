@@ -1,7 +1,7 @@
-package eunoospring.splearn.domain;
+package eunoospring.splearn.domain.member;
 
-import static eunoospring.splearn.domain.MemberFixture.createMemberRegisterRequest;
-import static eunoospring.splearn.domain.MemberFixture.createPasswordEncoder;
+import static eunoospring.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
+import static eunoospring.splearn.domain.member.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

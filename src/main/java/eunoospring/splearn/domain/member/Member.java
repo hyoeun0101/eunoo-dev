@@ -1,10 +1,13 @@
-package eunoospring.splearn.domain;
+package eunoospring.splearn.domain.member;
 
 
 import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
 
+import eunoospring.splearn.domain.AbstractEntity;
+import eunoospring.splearn.domain.shared.Email;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +28,9 @@ public class Member extends AbstractEntity {
     private String passwordHash;
 
     private MemberStatus status;
+
+    @OneToOne
+    private MemberDetail memberDetail;
 
     public static Member register(MemberRegisterRequest request, PasswordEncoder passwordEncoder) {
         Member member = new Member();

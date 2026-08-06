@@ -1,7 +1,7 @@
-package eunoospring.splearn.application.required;
+package eunoospring.splearn.application.member.required;
 
-import eunoospring.splearn.domain.Email;
-import eunoospring.splearn.domain.Member;
+import eunoospring.splearn.domain.shared.Email;
+import eunoospring.splearn.domain.member.Member;
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
 

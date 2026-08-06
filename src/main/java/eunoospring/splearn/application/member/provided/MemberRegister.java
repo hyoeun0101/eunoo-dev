@@ -1,7 +1,7 @@
-package eunoospring.splearn.application.provided;
+package eunoospring.splearn.application.member.provided;
 
-import eunoospring.splearn.domain.Member;
-import eunoospring.splearn.domain.MemberRegisterRequest;
+import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.domain.member.MemberRegisterRequest;
 import jakarta.validation.Valid;
 
 /**

@@ -1,14 +1,14 @@
-package eunoospring.splearn.application;
+package eunoospring.splearn.application.member;
 
-import eunoospring.splearn.application.provided.MemberFinder;
-import eunoospring.splearn.application.provided.MemberRegister;
-import eunoospring.splearn.application.required.EmailSender;
-import eunoospring.splearn.application.required.MemberRepository;
-import eunoospring.splearn.domain.DuplicationEmailException;
-import eunoospring.splearn.domain.Email;
-import eunoospring.splearn.domain.Member;
-import eunoospring.splearn.domain.MemberRegisterRequest;
-import eunoospring.splearn.domain.PasswordEncoder;
+import eunoospring.splearn.application.member.provided.MemberFinder;
+import eunoospring.splearn.application.member.provided.MemberRegister;
+import eunoospring.splearn.application.member.required.EmailSender;
+import eunoospring.splearn.application.member.required.MemberRepository;
+import eunoospring.splearn.domain.member.DuplicationEmailException;
+import eunoospring.splearn.domain.shared.Email;
+import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.domain.member.MemberRegisterRequest;
+import eunoospring.splearn.domain.member.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

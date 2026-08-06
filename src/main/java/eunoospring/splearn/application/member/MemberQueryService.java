@@ -1,8 +1,8 @@
-package eunoospring.splearn.application;
+package eunoospring.splearn.application.member;
 
-import eunoospring.splearn.application.provided.MemberFinder;
-import eunoospring.splearn.application.required.MemberRepository;
-import eunoospring.splearn.domain.Member;
+import eunoospring.splearn.application.member.provided.MemberFinder;
+import eunoospring.splearn.application.member.required.MemberRepository;
+import eunoospring.splearn.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

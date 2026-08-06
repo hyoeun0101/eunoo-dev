@@ -1,11 +1,11 @@
-package eunoospring.splearn.application.provided;
+package eunoospring.splearn.application.member.provided;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.SplearnTestConfiguration;
-import eunoospring.splearn.domain.Member;
-import eunoospring.splearn.domain.MemberFixture;
+import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.domain.member.MemberFixture;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

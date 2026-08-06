@@ -1,4 +1,4 @@
-package eunoospring.splearn.domain;
+package eunoospring.splearn.domain.member;
 
 public enum MemberStatus {
     PENDING,

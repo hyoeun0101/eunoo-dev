@@ -1,11 +1,11 @@
-package eunoospring.splearn.application.required;
+package eunoospring.splearn.application.member.required;
 
-import static eunoospring.splearn.domain.MemberFixture.createMemberRegisterRequest;
-import static eunoospring.splearn.domain.MemberFixture.createPasswordEncoder;
+import static eunoospring.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
+import static eunoospring.splearn.domain.member.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import eunoospring.splearn.domain.Member;
+import eunoospring.splearn.domain.member.Member;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

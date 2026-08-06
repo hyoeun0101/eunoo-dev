@@ -1,6 +1,6 @@
-package eunoospring.splearn.application.required;
+package eunoospring.splearn.application.member.required;
 
-import eunoospring.splearn.domain.Email;
+import eunoospring.splearn.domain.shared.Email;
 
 /**
  * 이메일을 발송한다

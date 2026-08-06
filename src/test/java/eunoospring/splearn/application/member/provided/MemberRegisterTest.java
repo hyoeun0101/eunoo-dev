@@ -1,14 +1,14 @@
-package eunoospring.splearn.application.provided;
+package eunoospring.splearn.application.member.provided;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.SplearnTestConfiguration;
-import eunoospring.splearn.domain.DuplicationEmailException;
-import eunoospring.splearn.domain.Member;
-import eunoospring.splearn.domain.MemberFixture;
-import eunoospring.splearn.domain.MemberRegisterRequest;
-import eunoospring.splearn.domain.MemberStatus;
+import eunoospring.splearn.domain.member.DuplicationEmailException;
+import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.domain.member.MemberFixture;
+import eunoospring.splearn.domain.member.MemberRegisterRequest;
+import eunoospring.splearn.domain.member.MemberStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;

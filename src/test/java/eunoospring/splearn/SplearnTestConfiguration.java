@@ -1,8 +1,8 @@
 package eunoospring.splearn;
 
-import eunoospring.splearn.application.required.EmailSender;
-import eunoospring.splearn.domain.MemberFixture;
-import eunoospring.splearn.domain.PasswordEncoder;
+import eunoospring.splearn.application.member.required.EmailSender;
+import eunoospring.splearn.domain.member.MemberFixture;
+import eunoospring.splearn.domain.member.PasswordEncoder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

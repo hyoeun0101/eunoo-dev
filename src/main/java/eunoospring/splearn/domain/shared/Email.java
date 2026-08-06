@@ -1,4 +1,4 @@
-package eunoospring.splearn.domain;
+package eunoospring.splearn.domain.shared;
 
 import java.util.regex.Pattern;
 
