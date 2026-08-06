@@ -1,7 +1,7 @@
 package eunoospring.splearn.adapter.integration;
 
-import eunoospring.splearn.application.required.EmailSender;
-import eunoospring.splearn.domain.Email;
+import eunoospring.splearn.application.member.required.EmailSender;
+import eunoospring.splearn.domain.shared.Email;
 import org.springframework.stereotype.Component;
 
 @Component
