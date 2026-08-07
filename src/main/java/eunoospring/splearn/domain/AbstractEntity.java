@@ -16,7 +16,7 @@ public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter(onMethod_ = {@Nullable})
-    public Long id;
+   private Long id;
 
     @Override
     public final boolean equals(Object o) {
