@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.2" xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd">
+    <persistence-unit name="hello">
+        <!-- Gradle은 클래스(build/classes)와 리소스(build/resources)를 서로 다른 디렉터리에 두기 때문에
+             persistence.xml 위치를 기준으로 한 엔티티 자동 스캔이 동작하지 않는다. 명시적으로 등록한다. -->
+        <class>eunoospring.jpabasic.section05.Member</class>
+
+        <properties>
+            <!-- 필수 속성 -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.user" value="myuser"/>
+            <property name="jakarta.persistence.jdbc.password" value="secret"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jpabasic"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments"  value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+            <!--batch_size 만큼 쿼리를 모아서 쿼리 실행-->
+<!--            <property name="hibernate.jdbc.batch_size" value="2" />-->
+        </properties>
+    </persistence-unit>
+
+</persistence>

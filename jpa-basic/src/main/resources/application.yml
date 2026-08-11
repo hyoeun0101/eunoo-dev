@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: jpa-basic
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
