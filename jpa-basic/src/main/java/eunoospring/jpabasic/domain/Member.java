@@ -23,5 +23,4 @@ public class Member {
     private String zipcode;
 
 
-
 }
