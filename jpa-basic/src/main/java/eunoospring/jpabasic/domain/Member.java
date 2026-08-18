@@ -1,6 +1,7 @@
 package eunoospring.jpabasic.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,11 +17,6 @@ public class Member extends BaseEntity{
 
     private String name;
 
-    private String city;
-
-    private String street;
-
-    private String zipcode;
-
-
+    @Embedded
+    private Address address;
 }
