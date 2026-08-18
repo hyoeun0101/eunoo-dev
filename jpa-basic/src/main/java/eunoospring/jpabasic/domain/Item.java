@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter @Setter
 @Inheritance(strategy = InheritanceType.JOINED) // 슈퍼 테이블로 생성. 해당 애노테이션 넣지 않으면 하나의 테이블로 생성됨.
 @DiscriminatorColumn //dtype 자동 생성
-public class Item {
+public abstract class Item extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "item_id")
     private Long id;
