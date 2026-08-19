@@ -11,8 +11,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter @Setter
 public class Category extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
@@ -24,13 +27,17 @@ public class Category extends BaseEntity {
     private Category parent;
 
     @OneToMany
-    @JoinColumn(name = "parent")
+     @JoinColumn(name = "parent")
     private List<Category> child = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "category_item",
             joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> items = new ArrayList<>();
+
+    public void addChildCategory(Category category) {
+        this.child.add(category);
+        category.setParent(this);
+    }
 }

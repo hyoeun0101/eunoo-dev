@@ -5,8 +5,8 @@
     <persistence-unit name="hello">
         <!-- Gradle은 클래스(build/classes)와 리소스(build/resources)를 서로 다른 디렉터리에 두기 때문에
              persistence.xml 위치를 기준으로 한 엔티티 자동 스캔이 동작하지 않는다. 명시적으로 등록한다. -->
-        <class>eunoospring.jpabasic.domain.Item</class>
-        <class>eunoospring.jpabasic.domain.Movie</class>
+        <class>eunoospring.jpabasic.exam.Team</class>
+        <class>eunoospring.jpabasic.exam.TeamMember</class>
 
         <properties>
             <!-- 필수 속성 -->

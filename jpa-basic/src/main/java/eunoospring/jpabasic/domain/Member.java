@@ -4,14 +4,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
-public class Member extends BaseEntity{
-    @Id @GeneratedValue
+@Setter
+public class Member extends BaseEntity {
+    @Id
+    @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
@@ -19,4 +24,7 @@ public class Member extends BaseEntity{
 
     @Embedded
     private Address address;
+
+    @OneToMany(mappedBy = "member")
+    List<Order> orders = new ArrayList<>();
 }

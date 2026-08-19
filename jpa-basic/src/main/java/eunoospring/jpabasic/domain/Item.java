@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter @Setter
@@ -29,6 +28,6 @@ public abstract class Item extends BaseEntity {
 
     private int stockQuantity;
 
-//    @ManyToMany(mappedBy = "items")
-//    private List<Category> categories = new ArrayList<>();
+    @ManyToMany(mappedBy = "items")
+    private List<Category> categories = new ArrayList<>();
 }

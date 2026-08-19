@@ -1,4 +1,4 @@
-package eunoospring.jpabasic.domain;
+package eunoospring.jpabasic.exam;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
