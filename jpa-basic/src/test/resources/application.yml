@@ -1,14 +1,12 @@
 spring:
-  application:
-    name: jpa-basic
   datasource:
-    url: jdbc:mysql://localhost:3306/jpabasic
-    username: myuser
-    password: secret
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:

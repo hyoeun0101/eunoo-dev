@@ -27,14 +27,14 @@ class MemberRepositoryTest {
 
         Long savedId = mberRepository.save(member);
 
-//        em.flush();
-//        em.clear();
+        em.flush();
+        em.clear();
 
-        Member findMber = mberRepository.find(savedId);
+        Member findMber = mberRepository.findOne(savedId);
 
         assertThat(findMber.getId()).isEqualTo(member.getId());
         assertThat(findMber.getName()).isEqualTo(member.getName());
-        assertThat(findMber).isEqualTo(member);
-        assertSame(findMber, member);
+//        assertThat(findMber).isEqualTo(member);
+//        assertSame(findMber, member);
     }
 }

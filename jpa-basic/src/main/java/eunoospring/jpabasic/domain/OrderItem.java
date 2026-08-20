@@ -7,12 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "order_item_id")
@@ -36,5 +39,22 @@ public class OrderItem extends BaseEntity {
      */
     private int count;
 
+    public static OrderItem createOrderItem(Order order, Item item, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(item.getPrice());
+        orderItem.setCount(count);
 
+        return orderItem;
+
+    }
+
+    public void cancel() {
+        item.addStock(this.count);
+    }
+
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
 }
