@@ -71,7 +71,7 @@ public class Member extends AbstractEntity {
         return this.status == MemberStatus.ACTVIE;
     }
 
-    public void updateInfo(MemberInfoUpdateRequest request) {
+    public void updateInfo(MemberUpdateInfoRequest request) {
         state(status == MemberStatus.ACTVIE, "ACTIVE 상태가 아닙니다");
 
         this.nickname = Objects.requireNonNull(request.nickname());

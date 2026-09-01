@@ -38,7 +38,7 @@ class MemberApiWebMvcTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .hasStatusOk()
                 .bodyJson()
-                .extractingPath("$.memberId").asNumber().isEqualTo(1);
+                .extractingPath("$.memberId").convertTo(Long.class).isEqualTo(1L);
 
         Mockito.verify(memberRegister).register(request);
     }

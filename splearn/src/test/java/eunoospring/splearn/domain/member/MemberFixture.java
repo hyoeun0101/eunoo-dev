@@ -12,6 +12,14 @@ public class MemberFixture {
         return new MemberRegisterRequest(email, "eunoo", "verysecret");
     }
 
+    public static MemberUpdateInfoRequest createMemberUpdateInfoRequest() {
+        return createMemberUpdateInfoRequest("hello11");
+    }
+
+    public static MemberUpdateInfoRequest createMemberUpdateInfoRequest(String profileAddress) {
+        return new MemberUpdateInfoRequest("hellooo", profileAddress, "안녕하세요.");
+    }
+
     public static PasswordEncoder createPasswordEncoder() {
         return new PasswordEncoder() {
             @Override

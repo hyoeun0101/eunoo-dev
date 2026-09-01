@@ -6,7 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.domain.member.MemberUpdateInfoRequest;
 import eunoospring.splearn.domain.member.MemberStatus;
+import eunoospring.splearn.domain.member.Profile;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +48,54 @@ class MemberRepositoryTest {
         Member member2 = Member.register(createMemberRegisterRequest(), createPasswordEncoder());
         assertThatThrownBy(() -> memberRepository.save(member2))
                 .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void updateProfile() {
+        Member member = createActivatedMember("eunoo@gmail.com");
+        member.updateInfo(new MemberUpdateInfoRequest("eunoo12", "eunoo", "안녕하세요."));
+        memberRepository.save(member);
+
+        em.flush();
+        em.clear();
+
+        Member found = memberRepository.findById(member.getId()).orElseThrow();
+        assertThat(found.getNickname()).isEqualTo("eunoo12");
+        assertThat(found.getDetail().getProfile().address()).isEqualTo("eunoo");
+        assertThat(found.getDetail().getIntroduction()).isEqualTo("안녕하세요.");
+    }
+
+    @Test
+    void findByProfile() {
+        Member member = createActivatedMember("eunoo@gmail.com");
+        member.updateInfo(new MemberUpdateInfoRequest("eunoo12", "eunoo", "안녕하세요."));
+        memberRepository.save(member);
+
+        em.flush();
+        em.clear();
+
+        assertThat(memberRepository.findByProfile(new Profile("eunoo"))).isPresent();
+        assertThat(memberRepository.findByProfile(new Profile("jun"))).isEmpty();
+    }
+
+    @Test
+    void duplicateProfileFail() {
+        Member member = createActivatedMember("eunoo@gmail.com");
+        member.updateInfo(new MemberUpdateInfoRequest("eunoo12", "eunoo", "안녕하세요."));
+        memberRepository.save(member);
+
+        em.flush();
+
+        Member member2 = createActivatedMember("jun@gmail.com");
+        member2.updateInfo(new MemberUpdateInfoRequest("jun12", "eunoo", "안녕하세요."));
+
+        assertThatThrownBy(() -> memberRepository.save(member2))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    private Member createActivatedMember(String email) {
+        Member member = Member.register(createMemberRegisterRequest(email), createPasswordEncoder());
+        member.activate();
+        return member;
     }
 }

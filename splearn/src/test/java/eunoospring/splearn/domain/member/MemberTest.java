@@ -101,7 +101,7 @@ class MemberTest {
 
     @Test
     void updatedInfo() {
-        var request = new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요.");
+        var request = new MemberUpdateInfoRequest("eunoo12", "eunoo", "안녕하세요.");
         member.activate();
 
         member.updateInfo(request);
@@ -113,7 +113,7 @@ class MemberTest {
 
     @Test
     void updateInfoFail() {
-        var request = new MemberInfoUpdateRequest("eunoo12", "eunoo", "안녕하세요.");
+        var request = new MemberUpdateInfoRequest("eunoo12", "eunoo", "안녕하세요.");
 
         assertThatThrownBy(() -> member.updateInfo(request)).isInstanceOf(IllegalStateException.class);
     }

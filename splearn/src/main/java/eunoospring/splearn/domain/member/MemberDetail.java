@@ -3,6 +3,7 @@ package eunoospring.splearn.domain.member;
 
 import eunoospring.splearn.domain.AbstractEntity;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,8 +42,14 @@ public class MemberDetail extends AbstractEntity {
         this.deactivatedAt = LocalDateTime.now();
     }
 
-    void updateInfo(MemberInfoUpdateRequest request) {
-        this.profile = new Profile(request.profileAddress());
+    void updateInfo(MemberUpdateInfoRequest request) {
+        this.profile = convertToProfile(request.profileAddress());
         this.introduction = request.introduction();
+    }
+
+    private Profile convertToProfile(@Size(max = 15) String profileAddress) {
+        if (profileAddress == null || profileAddress.isEmpty()) return null;
+
+        return new Profile(profileAddress);
     }
 }
