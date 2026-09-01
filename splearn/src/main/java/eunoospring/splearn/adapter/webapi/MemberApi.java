@@ -3,7 +3,7 @@ package eunoospring.splearn.adapter.webapi;
 import eunoospring.splearn.adapter.webapi.dto.MemberRegisterResponse;
 import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.domain.member.Member;
-import eunoospring.splearn.domain.member.MemberRegisterRequest;
+import eunoospring.splearn.application.member.provided.MemberRegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

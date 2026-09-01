@@ -17,7 +17,7 @@ class MemberTest {
     void setup() {
         this.passwordEncoder = createPasswordEncoder();
 
-        member = Member.register(createMemberRegisterRequest(), passwordEncoder);
+        member = Member.register(createMemberRegisterRequest().toInfo(), passwordEncoder);
     }
 
     @Test
@@ -29,7 +29,7 @@ class MemberTest {
 
     @Test
     void constructorNullCheck() {
-        assertThatThrownBy(() -> Member.register(createMemberRegisterRequest(null), passwordEncoder)
+        assertThatThrownBy(() -> Member.register(createMemberRegisterRequest(null).toInfo(), passwordEncoder)
         ).isInstanceOf(NullPointerException.class);
     }
 
@@ -37,7 +37,7 @@ class MemberTest {
     void activate() {
         member.activate();
 
-        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTVIE);
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
         assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
@@ -95,7 +95,7 @@ class MemberTest {
     @Test
     void invalidEmail() {
         assertThatThrownBy(() ->
-                Member.register(createMemberRegisterRequest("invalid email"), passwordEncoder)
+                Member.register(createMemberRegisterRequest("invalid email").toInfo(), passwordEncoder)
         ).isInstanceOf(IllegalArgumentException.class);
     }
 

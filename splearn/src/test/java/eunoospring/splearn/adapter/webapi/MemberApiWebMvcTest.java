@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
-import eunoospring.splearn.domain.member.MemberRegisterRequest;
+import eunoospring.splearn.application.member.provided.MemberRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

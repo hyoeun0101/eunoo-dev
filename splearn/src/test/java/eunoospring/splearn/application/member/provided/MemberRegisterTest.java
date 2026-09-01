@@ -8,7 +8,6 @@ import eunoospring.splearn.RecordingEmailSender;
 import eunoospring.splearn.SplearnTestConfiguration;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
-import eunoospring.splearn.domain.member.MemberRegisterRequest;
 import eunoospring.splearn.domain.member.MemberStatus;
 import eunoospring.splearn.domain.member.exception.DuplicationEmailException;
 import eunoospring.splearn.domain.member.exception.DuplicationProfileException;
@@ -85,7 +84,7 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager em, Recor
         em.flush(); // update문 실행
 
         //then
-        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTVIE);
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
         assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 

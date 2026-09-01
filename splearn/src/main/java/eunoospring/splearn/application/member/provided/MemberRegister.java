@@ -2,7 +2,6 @@ package eunoospring.splearn.application.member.provided;
 
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberUpdateInfoRequest;
-import eunoospring.splearn.domain.member.MemberRegisterRequest;
 import jakarta.validation.Valid;
 
 /**

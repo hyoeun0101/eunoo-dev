@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.metamodel.mapping.ordering.ast.FkDomainPathContinuation;
 
 @Entity
 @Getter
@@ -31,12 +32,12 @@ public class Member extends AbstractEntity {
 
     private MemberDetail detail;
 
-    public static Member register(MemberRegisterRequest request, PasswordEncoder passwordEncoder) {
+    public static Member register(MemberRegisterInfo registerInfo, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
-        member.email = new Email(request.email());
-        member.nickname = requireNonNull(request.nickname());
-        member.passwordHash = requireNonNull(passwordEncoder.encode(request.password()));
+        member.email = new Email(registerInfo.email());
+        member.nickname = requireNonNull(registerInfo.nickname());
+        member.passwordHash = requireNonNull(passwordEncoder.encode(registerInfo.password()));
 
         member.status = MemberStatus.PENDING;
 
@@ -48,15 +49,15 @@ public class Member extends AbstractEntity {
     public void activate() {
         state(status == MemberStatus.PENDING, "PENDING 상태가 아닙니다");
 
-        this.status = MemberStatus.ACTVIE;
+        this.status = MemberStatus.ACTIVE;
         this.detail.activate();
     }
 
     public void deactivate() {
-        state(status == MemberStatus.ACTVIE, "ACTIVE 상태가 아닙니다");
+        state(status == MemberStatus.ACTIVE, "ACTIVE 상태가 아닙니다");
 
         this.status = MemberStatus.DEACTIVATED;
-        this.detail.decactivate();
+        this.detail.deactivate();
     }
 
     public boolean verifyPassword(String password, PasswordEncoder passwordEncoder) {
@@ -68,11 +69,11 @@ public class Member extends AbstractEntity {
     }
 
     public boolean isActive() {
-        return this.status == MemberStatus.ACTVIE;
+        return this.status == MemberStatus.ACTIVE;
     }
 
     public void updateInfo(MemberUpdateInfoRequest request) {
-        state(status == MemberStatus.ACTVIE, "ACTIVE 상태가 아닙니다");
+        state(status == MemberStatus.ACTIVE, "ACTIVE 상태가 아닙니다");
 
         this.nickname = Objects.requireNonNull(request.nickname());
         this.detail.updateInfo(request);

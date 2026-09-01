@@ -1,5 +1,6 @@
 package eunoospring.splearn.domain.member;
 
+import eunoospring.splearn.application.member.provided.MemberRegisterRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class MemberFixture {
@@ -35,7 +36,7 @@ public class MemberFixture {
     }
 
     public static Member createMember(Long id) {
-        Member member = Member.register(createMemberRegisterRequest(), createPasswordEncoder());
+        Member member = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
 
         ReflectionTestUtils.setField(member, "id", id);
         return member;

@@ -10,7 +10,7 @@ import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.application.member.required.MemberRepository;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
-import eunoospring.splearn.domain.member.MemberRegisterRequest;
+import eunoospring.splearn.application.member.provided.MemberRegisterRequest;
 import eunoospring.splearn.domain.member.MemberStatus;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
