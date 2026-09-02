@@ -35,10 +35,24 @@ public class MemberFixture {
         };
     }
 
+    public static Member createMember() {
+        return Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
+    }
+
     public static Member createMember(Long id) {
         Member member = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
-
         ReflectionTestUtils.setField(member, "id", id);
         return member;
     }
+
+    public static Member createMember(String email) {
+        return Member.register(createMemberRegisterRequest(email).toInfo(), createPasswordEncoder());
+    }
+
+    public static Member createActiveMember() {
+        Member member = createMember();
+        member.activate();
+        return member;
+    }
+
 }
