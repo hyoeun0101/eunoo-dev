@@ -1,5 +1,7 @@
 package eunoospring.splearn.domain.instructor;
 
+import static eunoospring.splearn.domain.instructor.InstructorFixture.createActiveInstructor;
+import static eunoospring.splearn.domain.instructor.InstructorFixture.createInstructor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -8,12 +10,6 @@ import eunoospring.splearn.domain.member.MemberFixture;
 import org.junit.jupiter.api.Test;
 
 class InstructorTest {
-
-    private static Instructor applyInstructor() {
-        Member member = MemberFixture.createActiveMember();
-        Instructor instructor = Instructor.apply(member);
-        return instructor;
-    }
 
     @Test
     void apply() {
@@ -31,13 +27,11 @@ class InstructorTest {
 
         assertThatThrownBy(() -> Instructor.apply(member))
                 .isInstanceOf(IllegalStateException.class);
-
     }
 
     @Test
     void approve() {
-        Member member = MemberFixture.createActiveMember();
-        Instructor instructor = Instructor.apply(member);
+        Instructor instructor = createInstructor();
 
         instructor.approve();
 
@@ -46,17 +40,14 @@ class InstructorTest {
 
     @Test
     void approveFail() {
-        Member member = MemberFixture.createActiveMember();
-        Instructor instructor = Instructor.apply(member);
-        instructor.approve();
+        Instructor instructor = createActiveInstructor();
 
         assertThatThrownBy(instructor::approve).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void reject() {
-        Member member = MemberFixture.createActiveMember();
-        Instructor instructor = Instructor.apply(member);
+        Instructor instructor = createInstructor();
 
         instructor.reject();
 
@@ -65,25 +56,25 @@ class InstructorTest {
 
     @Test
     void rejectFail() {
-        Member member = MemberFixture.createActiveMember();
-        Instructor instructor = Instructor.apply(member);
-        instructor.approve();
+        Instructor instructor = createActiveInstructor();
 
         assertThatThrownBy(instructor::reject).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void isActive() {
-        Instructor instructor = applyInstructor();
+        Instructor instructor = createInstructor();
 
         assertThat(instructor.isActive()).isFalse();
+
         instructor.approve();
+
         assertThat(instructor.isActive()).isTrue();
     }
 
     @Test
     void ensureActive() {
-        Instructor instructor = applyInstructor();
+        Instructor instructor = createInstructor();
 
         assertThatThrownBy(instructor::ensureActive).isInstanceOf(IllegalStateException.class);
 
