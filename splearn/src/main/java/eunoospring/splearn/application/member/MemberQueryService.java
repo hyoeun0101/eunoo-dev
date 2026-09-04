@@ -3,12 +3,12 @@ package eunoospring.splearn.application.member;
 import eunoospring.splearn.application.member.provided.MemberFinder;
 import eunoospring.splearn.application.member.required.MemberRepository;
 import eunoospring.splearn.domain.member.Member;
+import eunoospring.splearn.support.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
+@ApplicationService
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberFinder {
     private final MemberRepository memberRepository;

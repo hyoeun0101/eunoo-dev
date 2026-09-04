@@ -3,19 +3,14 @@ package eunoospring.splearn.application.member.provided;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import eunoospring.splearn.SplearnTestConfiguration;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
+import eunoospring.splearn.support.ApplicationServiceTest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("ImplicitSubclassInspection")
-@SpringBootTest
-@Import(SplearnTestConfiguration.class)
-@Transactional
+@ApplicationServiceTest
 record MemberFinderTest(MemberFinder memberFinder, MemberRegister memberRegister, EntityManager entityManager) {
 
     @Test

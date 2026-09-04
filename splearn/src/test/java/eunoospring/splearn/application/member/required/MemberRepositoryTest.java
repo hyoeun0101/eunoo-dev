@@ -6,23 +6,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.domain.member.Member;
-import eunoospring.splearn.domain.member.MemberUpdateInfoRequest;
+import eunoospring.splearn.domain.member.MemberRegisterInfo;
 import eunoospring.splearn.domain.member.MemberStatus;
+import eunoospring.splearn.domain.member.MemberUpdateInfoRequest;
 import eunoospring.splearn.domain.member.Profile;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
 @DataJpaTest
+@RequiredArgsConstructor
 class MemberRepositoryTest {
 
-    @Autowired
-    MemberRepository memberRepository;
+    final MemberRepository memberRepository;
 
-    @Autowired
-    EntityManager em;
+    final EntityManager em;
 
     @Test
     void createMember() {
@@ -42,10 +42,11 @@ class MemberRepositoryTest {
 
     @Test
     void duplicateEmailFail() {
-        Member member = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
+        MemberRegisterInfo registerInfo = createMemberRegisterRequest().toInfo();
+        Member member = Member.register(registerInfo, createPasswordEncoder());
         memberRepository.save(member);
 
-        Member member2 = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
+        Member member2 = Member.register(registerInfo, createPasswordEncoder());
         assertThatThrownBy(() -> memberRepository.save(member2))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }

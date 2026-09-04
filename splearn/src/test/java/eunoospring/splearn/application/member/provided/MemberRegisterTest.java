@@ -5,24 +5,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.RecordingEmailSender;
-import eunoospring.splearn.SplearnTestConfiguration;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
 import eunoospring.splearn.domain.member.MemberStatus;
 import eunoospring.splearn.domain.member.exception.DuplicationEmailException;
 import eunoospring.splearn.domain.member.exception.DuplicationProfileException;
+import eunoospring.splearn.support.ApplicationServiceTest;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("ImplicitSubclassInspection")
-@SpringBootTest
-@Import(SplearnTestConfiguration.class)
-@Transactional
+@ApplicationServiceTest
 record MemberRegisterTest(MemberRegister memberRegister, EntityManager em, RecordingEmailSender emailSender) {
 
     @BeforeEach
@@ -49,14 +44,14 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager em, Recor
     void duplicationEmailFail() {
         //given
         // 곧바로 insert 실행
-        memberRegister.register(MemberFixture.createMemberRegisterRequest());
-
+        MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest();
+        memberRegister.register(request);
 
         //when & then
         // 두 번째 register() 는 내부에서 memberRepository.findByEmail(...) 을 실행한다.
         // 내부의 findByEmail => JPQL 쿼리를 날리기 직전에 자동으로 flush.
         // -> 그래서 이 테스트에서는 em.flush() 를 손으로 부를 필요가 없다.
-        assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
+        assertThatThrownBy(() -> memberRegister.register(request))
                 .isInstanceOf(DuplicationEmailException.class);
     }
 

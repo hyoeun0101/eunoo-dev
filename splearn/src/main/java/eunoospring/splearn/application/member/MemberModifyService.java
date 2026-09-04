@@ -12,14 +12,10 @@ import eunoospring.splearn.domain.member.Profile;
 import eunoospring.splearn.domain.member.exception.DuplicationEmailException;
 import eunoospring.splearn.domain.member.exception.DuplicationProfileException;
 import eunoospring.splearn.domain.shared.Email;
+import eunoospring.splearn.support.ValidatedApplicationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
-@Service
-@Transactional
-@Validated
+@ValidatedApplicationService
 @RequiredArgsConstructor
 public class MemberModifyService implements MemberRegister {
     private final MemberFinder memberFinder;

@@ -12,6 +12,7 @@ import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
 import eunoospring.splearn.application.member.provided.MemberRegisterRequest;
 import eunoospring.splearn.domain.member.MemberStatus;
+import eunoospring.splearn.support.WebApiAdapterTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,9 +24,7 @@ import org.springframework.test.web.servlet.assertj.MvcTestResult;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@WebApiAdapterTest
 @RequiredArgsConstructor
 class MemberApiTest {
 
@@ -60,10 +59,11 @@ class MemberApiTest {
     @Test
     void duplicateEmail() {
         //given
-        memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest();
+        memberRegister.register(request);
 
         //when
-        MvcTestResult result = requestRegister(MemberFixture.createMemberRegisterRequest());
+        MvcTestResult result = requestRegister(request);
 
         //then
         assertThat(result)
