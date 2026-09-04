@@ -1,16 +1,20 @@
 package eunoospring.splearn.domain.member;
 
 import eunoospring.splearn.application.member.provided.MemberRegisterRequest;
+import org.instancio.Instancio;
+import org.instancio.Select;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class MemberFixture {
 
-    public static MemberRegisterRequest createMemberRegisterRequest() {
-        return createMemberRegisterRequest("eunoo@gmail.com");
+    public static MemberRegisterRequest createMemberRegisterRequest(String email) {
+        return Instancio.of(MemberRegisterRequest.class)
+                .set(Select.field(MemberRegisterRequest::email), email)
+                .create();
     }
 
-    public static MemberRegisterRequest createMemberRegisterRequest(String email) {
-        return new MemberRegisterRequest(email, "eunoo", "verysecret");
+    public static MemberRegisterRequest createMemberRegisterRequest() {
+        return createMemberRegisterRequest(Instancio.gen().net().email().get());
     }
 
     public static MemberUpdateInfoRequest createMemberUpdateInfoRequest() {

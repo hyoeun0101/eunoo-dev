@@ -12,12 +12,13 @@ import org.junit.jupiter.api.Test;
 class MemberTest {
     Member member;
     PasswordEncoder passwordEncoder;
+    MemberRegisterInfo registerInfo;
 
     @BeforeEach
     void setup() {
         this.passwordEncoder = createPasswordEncoder();
-
-        member = Member.register(createMemberRegisterRequest().toInfo(), passwordEncoder);
+        registerInfo = createMemberRegisterRequest().toInfo();
+        member = Member.register(registerInfo, passwordEncoder);
     }
 
     @Test
@@ -70,7 +71,7 @@ class MemberTest {
 
     @Test
     void verifyPassword() {
-        assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword(registerInfo.password(), passwordEncoder)).isTrue();
         assertThat(member.verifyPassword("hello", passwordEncoder)).isFalse();
     }
 
