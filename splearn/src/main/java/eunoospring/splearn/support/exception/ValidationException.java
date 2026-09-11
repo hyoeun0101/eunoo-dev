@@ -8,4 +8,8 @@ public class ValidationException extends RuntimeException {
     public ValidationException(List<String> errors) {
         this.errors = errors;
     }
+
+    public List<String> getErrors() {
+        return this.errors;
+    }
 }

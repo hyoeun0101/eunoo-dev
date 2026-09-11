@@ -5,6 +5,8 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.library.Architectures;
+import com.tngtech.archunit.library.dependencies.SlicesRuleDefinition;
+import org.junit.jupiter.api.DisplayName;
 
 @AnalyzeClasses(packages = "eunoospring.splearn", importOptions = ImportOption.DoNotIncludeTests.class)
 public class HexagonalArchitectureTest {
@@ -19,6 +21,24 @@ public class HexagonalArchitectureTest {
                 .whereLayer("domain").mayOnlyBeAccessedByLayers("application", "adapter")
                 .whereLayer("application").mayOnlyBeAccessedByLayers("adapter")
                 .whereLayer("adapter").mayNotBeAccessedByAnyLayer()
+                .check(classes);
+    }
+
+    @ArchTest
+    @DisplayName("domain 계층 내에서 순환 의존성이 존재하면 안된다.")
+    void domainFreeOfCycle(JavaClasses classes) {
+        SlicesRuleDefinition.slices()
+                .matching("eunoospring.splearn.domain.(*)..")
+                .should().beFreeOfCycles()
+                .check(classes);
+    }
+
+    @ArchTest
+    @DisplayName("application 계층 내에서 순환 의존성이 존재하면 안된다.")
+    void applicationFreeOfCycle(JavaClasses classes) {
+        SlicesRuleDefinition.slices()
+                .matching("eunoospring.splearn.application.(*)..")
+                .should().beFreeOfCycles()
                 .check(classes);
     }
 }

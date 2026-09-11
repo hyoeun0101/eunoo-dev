@@ -4,21 +4,24 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.domain.member.MemberFixture;
 import eunoospring.splearn.support.ApplicationServiceTest;
+import eunoospring.splearn.support.test.BaseApplicationServiceTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.ObjectReadContext.Base;
 
 @ApplicationServiceTest
 @RequiredArgsConstructor
-class MemberAuthenticatorTest {
+class MemberAuthenticatorTest extends BaseApplicationServiceTest {
     final MemberRegister memberRegister;
 
     final MemberAuthenticator memberAuthenticator;
 
     @Test
     void login() {
-        //given
         MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(request).activate();
+
+
 
         var member = memberAuthenticator.login(new MemberLoginRequest(request.email(), request.password()));
     }

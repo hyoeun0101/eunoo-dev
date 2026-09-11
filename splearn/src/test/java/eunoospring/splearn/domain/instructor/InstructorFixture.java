@@ -1,5 +1,6 @@
 package eunoospring.splearn.domain.instructor;
 
+import eunoospring.splearn.application.instructor.provided.InstructorApplyRequest;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
 
@@ -21,5 +22,9 @@ public class InstructorFixture {
         Instructor instructor = Instructor.apply(member);
         instructor.approve();
         return instructor;
+    }
+
+    public static InstructorApplyRequest createInstructorApplyReqeust(Member member) {
+        return new InstructorApplyRequest(member.getId());
     }
 }

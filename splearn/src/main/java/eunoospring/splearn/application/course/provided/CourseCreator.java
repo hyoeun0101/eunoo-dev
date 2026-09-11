@@ -12,3 +12,4 @@ public interface CourseCreator {
     Course updateInfo(Long courseId, @Valid CourseUpdateRequest request);
 
 }
+

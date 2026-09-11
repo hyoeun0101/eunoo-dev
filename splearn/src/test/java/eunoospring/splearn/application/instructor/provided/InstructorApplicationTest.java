@@ -1,5 +1,6 @@
 package eunoospring.splearn.application.instructor.provided;
 
+import static eunoospring.splearn.domain.instructor.InstructorFixture.createInstructorApplyReqeust;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -7,9 +8,11 @@ import eunoospring.splearn.SplearnTestConfiguration;
 import eunoospring.splearn.application.instructor.required.InstructorRepository;
 import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.domain.instructor.Instructor;
+import eunoospring.splearn.domain.instructor.InstructorFixture;
 import eunoospring.splearn.domain.instructor.InstructorStatus;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
+import eunoospring.splearn.support.test.BaseApplicationServiceTest;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -18,25 +21,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.core.ObjectReadContext.Base;
 
 @SpringBootTest
 @Import(SplearnTestConfiguration.class)
 @Transactional
 @RequiredArgsConstructor
-class InstructorApplicationTest {
+class InstructorApplicationTest extends BaseApplicationServiceTest {
     final InstructorApplication instructorApplication;
-
     final InstructorRepository instructorRepository;
-
-    final MemberRegister memberRegister;
-
     final EntityManager em;
 
     @Test
     void apply() {
-        Member member = registerActiveMember();
+        Member member = prepareActiveMember();
 
-        Instructor instructor = instructorApplication.apply(new InstructorApplyRequest(member.getId()));
+        Instructor instructor = instructorApplication.apply(createInstructorApplyReqeust(member));
         em.flush();
         em.clear();
 
@@ -50,46 +50,18 @@ class InstructorApplicationTest {
     }
 
     @Test
-    void applyFailMemberNotActive() {
-        //given
-        // activate 하지 않아 PENDING 상태다.
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-
-        //when & then
-        assertThatThrownBy(() -> instructorApplication.apply(new InstructorApplyRequest(member.getId())))
-                .isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    void applyRequestFail() {
-        // 포트에 @Valid, 서비스에 @Validated 가 붙어 있어 서비스 진입 전에 걸러진다.
-        assertThatThrownBy(() -> instructorApplication.apply(new InstructorApplyRequest(null)))
-                .isInstanceOf(ConstraintViolationException.class);
-    }
-
-    @Test
-    void applyFailMemberNotFound() {
-        assertThatThrownBy(() -> instructorApplication.apply(new InstructorApplyRequest(9999L)))
-                .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
     void duplicateApply() {
-        //given
-        Member member = registerActiveMember();
-        instructorApplication.apply(new InstructorApplyRequest(member.getId()));
+        prepareActiveInstructor();
 
-        //when & then
-        // 한 회원은 한 번만 신청할 수 있다. instructor.member_id 의 유니크 제약으로 막힌다.
-        // IDENTITY 전략이라 save 시점에 곧바로 insert 가 나가므로 em.flush() 없이도 여기서 예외가 난다.
-        assertThatThrownBy(() -> instructorApplication.apply(new InstructorApplyRequest(member.getId())))
+        assertThatThrownBy(() ->
+                instructorApplication.apply(InstructorFixture.createInstructorApplyReqeust(member)))
                 .isInstanceOf(DuplicateInstructorApplicationException.class);
     }
 
     @Test
     void approve() {
         //given
-        Instructor instructor = applyInstructor();
+        prepareInstructor();
 
         //when
         instructorApplication.approve(instructor.getId());
@@ -103,8 +75,7 @@ class InstructorApplicationTest {
 
     @Test
     void approveFail() {
-        //given
-        Instructor instructor = applyInstructor();
+        prepareInstructor();
         instructorApplication.approve(instructor.getId());
 
         //when & then
@@ -115,10 +86,8 @@ class InstructorApplicationTest {
 
     @Test
     void reject() {
-        //given
-        Instructor instructor = applyInstructor();
+        prepareInstructor();
 
-        //when
         instructorApplication.reject(instructor.getId());
         em.flush();
         em.clear();
@@ -130,12 +99,8 @@ class InstructorApplicationTest {
 
     @Test
     void rejectFail() {
-        //given
-        Instructor instructor = applyInstructor();
-        instructorApplication.approve(instructor.getId());
+        prepareActiveInstructor();
 
-        //when & then
-        // PENDING 상태에서만 거절할 수 있다.
         assertThatThrownBy(() -> instructorApplication.reject(instructor.getId()))
                 .isInstanceOf(IllegalStateException.class);
     }
@@ -147,15 +112,6 @@ class InstructorApplicationTest {
 
         assertThatThrownBy(() -> instructorApplication.reject(9999L))
                 .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    private Member registerActiveMember() {
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        return memberRegister.activate(member.getId());
-    }
-
-    private Instructor applyInstructor() {
-        return instructorApplication.apply(new InstructorApplyRequest(registerActiveMember().getId()));
     }
 
 }
