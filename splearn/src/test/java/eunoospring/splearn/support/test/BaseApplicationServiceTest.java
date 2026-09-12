@@ -1,7 +1,10 @@
 package eunoospring.splearn.support.test;
 
+import eunoospring.splearn.application.course.provided.CourseCreator;
 import eunoospring.splearn.application.instructor.provided.InstructorApplication;
 import eunoospring.splearn.application.member.provided.MemberRegister;
+import eunoospring.splearn.domain.course.Course;
+import eunoospring.splearn.domain.course.CourseFixture;
 import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.domain.instructor.InstructorFixture;
 import eunoospring.splearn.domain.member.Member;
@@ -12,13 +15,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ApplicationServiceTest
 public class BaseApplicationServiceTest {
     @Autowired
+    CourseCreator courseCreator;
+
+    @Autowired
     MemberRegister memberRegister;
 
     @Autowired
     InstructorApplication instructorApplication;
 
     protected Member member;
-    protected                                                                                                                                         Instructor instructor;
+    protected Instructor instructor;
+    protected Course course;
+
+    protected Member prepareActiveMember() {
+        member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        member = memberRegister.activate(member.getId());
+        return member;
+    }
 
     protected Instructor prepareInstructor() {
         prepareActiveMember();
@@ -27,14 +40,15 @@ public class BaseApplicationServiceTest {
     }
 
     protected Instructor prepareActiveInstructor() {
-        this.prepareInstructor();
+        prepareInstructor();
         instructorApplication.approve(instructor.getId());
         return instructor;
     }
 
-    protected Member prepareActiveMember() {
-        this.member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        memberRegister.activate(member.getId());
-        return member;
+
+    protected void prepareCourse() {
+        prepareActiveInstructor();
+        course = courseCreator.create(CourseFixture.createCourseCreateRequest(instructor.getId(), null));
+        course.updateInfo(CourseFixture.createCourseUpdateRequest(null).toInfo());
     }
 }

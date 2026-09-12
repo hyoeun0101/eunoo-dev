@@ -58,6 +58,21 @@ public class CourseValidationService implements CourseValidator {
 
     }
 
+    @Override
+    public void validateForReview(Course course) {
+
+    }
+
+    @Override
+    public void validateForPublish(Course course) {
+
+    }
+
+    @Override
+    public void validateForArchive(Course course) {
+
+    }
+
     private void checkTitleDuplicationForUpdate(Course course, Instructor instructor, String title, List<String> errors) {
 
         courseRepository.findByInstructorAndTitle(instructor, title).ifPresent(found -> {

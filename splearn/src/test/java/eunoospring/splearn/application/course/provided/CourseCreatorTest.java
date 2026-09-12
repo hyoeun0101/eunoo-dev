@@ -34,7 +34,6 @@ class CourseCreatorTest extends BaseApplicationServiceTest {
 
         course = courseCreator.updateInfo(course.getId(), CourseFixture.createCourseUpdateRequest("Spring"));
 
-
         assertThat(course.getTitle()).isEqualTo("Spring");
     }
 

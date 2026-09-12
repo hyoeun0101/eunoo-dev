@@ -53,7 +53,7 @@ public class CourseFixture {
         return Instancio.of(CourseUpdateRequest.class)
                 .set(field(CourseUpdateRequest::title),
                         title == null ? gen().string().minLength(2).maxLength(100).get() : title)
-                .generate(field(CourseUpdateRequest::description), gen -> gen.string().maxLength(500).nullable())
+                .generate(field(CourseUpdateRequest::description), gen -> gen.string().maxLength(500))
                 .create();
     }
 

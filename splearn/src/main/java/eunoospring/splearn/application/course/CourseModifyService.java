@@ -45,20 +45,34 @@ public class CourseModifyService implements CourseCreator, CoursePublisher {
 
     @Override
     public Course submitForReview(Long courseId) {
-
         Course course = courseFinder.find(courseId);
 
         courseValidator.validateForReview(course);
-        return null;
+
+        course.submitForReview();
+
+        return courseRepository.save(course);
     }
 
     @Override
     public Course publish(Long courseId) {
-        return null;
+        Course course = courseFinder.find(courseId);
+
+        courseValidator.validateForPublish(course);
+
+        course.publish();
+
+        return courseRepository.save(course);
     }
 
     @Override
     public Course archive(Long courseId) {
-        return null;
+        Course course = courseFinder.find(courseId);
+
+        courseValidator.validateForArchive(course);
+
+        course.archive();
+
+        return courseRepository.save(course);
     }
 }
