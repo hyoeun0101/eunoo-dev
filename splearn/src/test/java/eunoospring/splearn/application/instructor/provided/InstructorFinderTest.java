@@ -4,11 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.SplearnTestConfiguration;
-import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.domain.instructor.Instructor;
+import eunoospring.splearn.domain.instructor.InstructorFixture;
 import eunoospring.splearn.domain.instructor.InstructorStatus;
 import eunoospring.splearn.domain.member.Member;
-import eunoospring.splearn.domain.member.MemberFixture;
 import eunoospring.splearn.support.test.BaseApplicationServiceTest;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ class InstructorFinderTest extends BaseApplicationServiceTest {
 
     @Test
     void find() {
-        prepareInstructor();
+        Instructor instructor = prepareInstructor();
         em.flush();
         em.clear();
 
@@ -45,7 +44,13 @@ class InstructorFinderTest extends BaseApplicationServiceTest {
 
     @Test
     void findByMember() {
-        prepareActiveInstructor();
+        Member member = prepareActiveMember();
+        Member member1 = member;
+        member1 = member1 == null ? prepareActiveMember() : member1;
+
+        Instructor instructor1 = instructorApplication.apply(InstructorFixture.createInstructorApplyReqeust(member1));
+        instructor1 = instructorApplication.approve(instructor1.getId());
+        Instructor instructor = instructor1;
         em.flush();
         em.clear();
 
@@ -55,7 +60,7 @@ class InstructorFinderTest extends BaseApplicationServiceTest {
 
     @Test
     void findByMemberNotApplied() {
-        prepareActiveMember();
+        Member member = prepareActiveMember();
         em.flush();
         em.clear();
 

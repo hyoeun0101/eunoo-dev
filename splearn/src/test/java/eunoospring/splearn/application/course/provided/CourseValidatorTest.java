@@ -47,7 +47,7 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
 
     @Test
     void titleDuplicationForUpdate() {
-        prepareActiveInstructor();
+        Instructor instructor = prepareActiveInstructor();
         Course course1 = courseRepository.save(CourseFixture.createCourse(instructor, "Clean Spring 1"));
 
         Course course2 = courseRepository.save(CourseFixture.createCourse(instructor, "Clean Spring 2"));

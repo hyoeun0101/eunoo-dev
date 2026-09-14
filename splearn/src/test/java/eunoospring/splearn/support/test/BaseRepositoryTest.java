@@ -1,10 +1,13 @@
 package eunoospring.splearn.support.test;
 
 import eunoospring.splearn.application.course.required.CourseRepository;
+import eunoospring.splearn.application.enrollment.required.EnrollmentRepository;
 import eunoospring.splearn.application.instructor.required.InstructorRepository;
 import eunoospring.splearn.application.member.required.MemberRepository;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.course.CourseFixture;
+import eunoospring.splearn.domain.enrollment.Enrollment;
+import eunoospring.splearn.domain.enrollment.EnrollmentFixture;
 import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.domain.instructor.InstructorFixture;
 import eunoospring.splearn.domain.member.Member;
@@ -15,25 +18,34 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 @DataJpaTest
 public class BaseRepositoryTest {
+
+    @Autowired
+    protected EnrollmentRepository enrollmentRepository;
+
     @Autowired
     protected EntityManager em;
+
     @Autowired
     protected MemberRepository memberRepository;
+
     @Autowired
     protected InstructorRepository instructorRepository;
+
     @Autowired
     protected CourseRepository courseRepository;
 
     protected Member member;
     protected Instructor instructor;
     protected Course course;
+    protected Enrollment enrollment;
 
-    protected void preparePublishedCourse() {
+    protected Course preparePublishedCourse() {
         prepareActiveMember();
         preprareActiveInstructor(member);
 
         course = CourseFixture.createPublishedCourse(instructor);
         courseRepository.save(course);
+        return course;
     }
 
     protected Instructor preprareActiveInstructor(Member member) {
@@ -46,5 +58,12 @@ public class BaseRepositoryTest {
         member = MemberFixture.createActiveMember();
         memberRepository.save(member);
         return member;
+    }
+
+    protected Enrollment prepareEnrollment(Member member, Course course) {
+        enrollment = EnrollmentFixture.createEnrollment(member, course);
+        enrollmentRepository.save(enrollment);
+
+        return enrollment;
     }
 }

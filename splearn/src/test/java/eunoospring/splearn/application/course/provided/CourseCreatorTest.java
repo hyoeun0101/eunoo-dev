@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.course.CourseFixture;
 import eunoospring.splearn.domain.course.CourseUpdateInfo;
+import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.support.ApplicationServiceTest;
 import eunoospring.splearn.support.test.BaseApplicationServiceTest;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ class CourseCreatorTest extends BaseApplicationServiceTest {
 
     @Test
     void create() {
-        prepareActiveInstructor();
+        Instructor instructor = prepareActiveInstructor();
 
         Course course = courseCreator.create(CourseFixture.createCourseCreateRequest(instructor.getId(), "Spring"));
 
@@ -29,12 +30,11 @@ class CourseCreatorTest extends BaseApplicationServiceTest {
 
     @Test
     void updateInfo() {
-        prepareActiveInstructor();
+        Instructor instructor = prepareActiveInstructor();
         Course course = courseCreator.create(CourseFixture.createCourseCreateRequest(instructor.getId(), "Java"));
 
         course = courseCreator.updateInfo(course.getId(), CourseFixture.createCourseUpdateRequest("Spring"));
 
         assertThat(course.getTitle()).isEqualTo("Spring");
     }
-
 }

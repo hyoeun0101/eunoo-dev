@@ -50,6 +50,7 @@ public class CourseFixture {
 
         return course;
     }
+
     public static CourseCreateRequest createCourseCreateRequest(Long instructorId, String title) {
 
         return Instancio.of(CourseCreateRequest.class)

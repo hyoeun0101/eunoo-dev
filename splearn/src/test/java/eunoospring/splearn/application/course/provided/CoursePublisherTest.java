@@ -16,14 +16,16 @@ class CoursePublisherTest extends BaseApplicationServiceTest {
 
     final private CoursePublisher coursePublisher;
 
+    private Course course;
+
     @BeforeEach
     void setUp() {
-        prepareCourse();
+        course = prepareCourse();
     }
 
     @Test
     void submitForReview() {
-        var courseForReview = coursePublisher.submitForReview(this.course.getId());
+        var courseForReview = coursePublisher.submitForReview(course.getId());
 
         assertThat(courseForReview.getStatus()).isEqualTo(CourseStatus.IN_REVIEW);
     }

@@ -51,19 +51,17 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
 
     @Test
     void duplicateApply() {
-        prepareActiveInstructor();
+        Instructor instructor = prepareActiveInstructor();
 
         assertThatThrownBy(() ->
-                instructorApplication.apply(InstructorFixture.createInstructorApplyReqeust(member)))
+                instructorApplication.apply(InstructorFixture.createInstructorApplyReqeust(instructor.getMember())))
                 .isInstanceOf(DuplicateInstructorApplicationException.class);
     }
 
     @Test
     void approve() {
-        //given
-        prepareInstructor();
+        Instructor instructor = prepareInstructor();
 
-        //when
         instructorApplication.approve(instructor.getId());
         em.flush();
         em.clear();
@@ -75,7 +73,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
 
     @Test
     void approveFail() {
-        prepareInstructor();
+        Instructor instructor = prepareInstructor();
         instructorApplication.approve(instructor.getId());
 
         //when & then
@@ -86,7 +84,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
 
     @Test
     void reject() {
-        prepareInstructor();
+        Instructor instructor = prepareInstructor();
 
         instructorApplication.reject(instructor.getId());
         em.flush();
@@ -99,7 +97,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
 
     @Test
     void rejectFail() {
-        prepareActiveInstructor();
+        Instructor instructor = prepareActiveInstructor();
 
         assertThatThrownBy(() -> instructorApplication.reject(instructor.getId()))
                 .isInstanceOf(IllegalStateException.class);
