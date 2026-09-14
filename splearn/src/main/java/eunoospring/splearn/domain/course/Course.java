@@ -28,12 +28,12 @@ import org.springframework.util.StringUtils;
         name = "UK_COURSE_INSTRUCTOR_TITLE",
         columnNames = {"instructor_id", "title"}))
 @Getter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"instructor"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course extends AbstractEntity {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    Instructor instructor;
+    private Instructor instructor;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -41,7 +41,6 @@ public class Course extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private CourseStatus status;
-
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private CourseDetail detail;

@@ -78,4 +78,8 @@ public class Member extends AbstractEntity {
         this.nickname = Objects.requireNonNull(request.nickname());
         this.detail.updateInfo(request);
     }
+
+    public void ensureActive() {
+        state(isActive(), "회원의 상태가 ACTIVE가 아닙니다.");
+    }
 }

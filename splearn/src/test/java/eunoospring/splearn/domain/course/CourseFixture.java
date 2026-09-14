@@ -38,6 +38,18 @@ public class CourseFixture {
                 .create();
     }
 
+    public static Course createPublishedCourse() {
+        return createPublishedCourse(null);
+    }
+
+    public static Course createPublishedCourse(Instructor instructor) {
+        Course course = instructor == null ? createCourse() : createCourse(instructor);
+        course.updateInfo(createCourseUpdateRequest(null).toInfo());
+        course.submitForReview();
+        course.publish();
+
+        return course;
+    }
     public static CourseCreateRequest createCourseCreateRequest(Long instructorId, String title) {
 
         return Instancio.of(CourseCreateRequest.class)
