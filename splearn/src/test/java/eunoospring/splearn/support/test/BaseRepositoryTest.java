@@ -34,36 +34,31 @@ public class BaseRepositoryTest {
     @Autowired
     protected CourseRepository courseRepository;
 
-    protected Member member;
-    protected Instructor instructor;
-    protected Course course;
-    protected Enrollment enrollment;
+    protected Member prepareActiveMember() {
+        Member member = MemberFixture.createActiveMember();
+        return memberRepository.save(member);
+    }
+
+    protected Instructor prepareActiveInstructor() {
+        Member member = prepareActiveMember();
+        Instructor instructor = InstructorFixture.createActiveInstructor(member);
+        return instructorRepository.save(instructor);
+    }
+
+    protected Course prepareCourse(Instructor instructor, String title) {
+        Course course = CourseFixture.createCourse(instructor, title);
+        return courseRepository.save(course);
+    }
 
     protected Course preparePublishedCourse() {
-        prepareActiveMember();
-        preprareActiveInstructor(member);
+        Instructor instructor = prepareActiveInstructor();
 
-        course = CourseFixture.createPublishedCourse(instructor);
-        courseRepository.save(course);
-        return course;
-    }
-
-    protected Instructor preprareActiveInstructor(Member member) {
-        instructor = InstructorFixture.createActiveInstructor(member);
-        instructorRepository.save(instructor);
-        return instructor;
-    }
-
-    protected Member prepareActiveMember() {
-        member = MemberFixture.createActiveMember();
-        memberRepository.save(member);
-        return member;
+        Course course = CourseFixture.createPublishedCourse(instructor);
+        return courseRepository.save(course);
     }
 
     protected Enrollment prepareEnrollment(Member member, Course course) {
-        enrollment = EnrollmentFixture.createEnrollment(member, course);
-        enrollmentRepository.save(enrollment);
-
-        return enrollment;
+        Enrollment enrollment = EnrollmentFixture.createEnrollment(member, course);
+        return enrollmentRepository.save(enrollment);
     }
 }

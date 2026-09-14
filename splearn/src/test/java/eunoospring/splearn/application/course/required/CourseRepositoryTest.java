@@ -1,7 +1,9 @@
 package eunoospring.splearn.application.course.required;
 
+import static eunoospring.splearn.domain.course.CourseFixture.createCourse;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.application.instructor.required.InstructorRepository;
 import eunoospring.splearn.application.member.required.MemberRepository;
@@ -11,6 +13,7 @@ import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.domain.instructor.InstructorFixture;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
+import eunoospring.splearn.support.test.BaseRepositoryTest;
 import jakarta.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
@@ -23,25 +26,19 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 @DataJpaTest
 @RequiredArgsConstructor
-class CourseRepositoryTest {
-    final CourseRepository courseRepository;
+class CourseRepositoryTest extends BaseRepositoryTest {
 
-    final EntityManager em;
-
-    final MemberRepository memberRepository;
-
-    final InstructorRepository instructorRepository;
-    private Instructor instructor;
+    Instructor instructor;
 
     @BeforeEach
     void setUp() {
-        Member member = memberRepository.save(MemberFixture.createActiveMember());
-        instructor = instructorRepository.save(InstructorFixture.createActiveInstructor(member));
+        instructor = prepareActiveInstructor();
     }
 
     @Test
     void saveAndFindId() {
-        Course course = CourseFixture.createCourse(instructor);
+        Course course = createCourse(instructor);
+
         course = courseRepository.save(course);
 
         assertThat(course.getId()).isNotNull();
@@ -57,9 +54,9 @@ class CourseRepositoryTest {
     @Test
     void findByTitleContaining() {
         List<Long> courseIds = Stream.of(
-                        CourseFixture.createCourse(instructor, "Hello Spring "),
-                        CourseFixture.createCourse(instructor, "Clean Spring 2"),
-                        CourseFixture.createCourse(instructor, "Clean Code 1"))
+                        createCourse(instructor, "Hello Spring "),
+                        createCourse(instructor, "Clean Spring 2"),
+                        createCourse(instructor, "Clean Code 1"))
                 .map(course -> courseRepository.save(course).getId())
                 .toList();
 
@@ -78,31 +75,26 @@ class CourseRepositoryTest {
 
     @Test
     void findByInstructor() {
-        Member member2 = memberRepository.save(MemberFixture.createActiveMember());
-        Instructor instructor2 = instructorRepository.save(InstructorFixture.createActiveInstructor(member2));
+        Course course1 = preparePublishedCourse();
+        Course course2 = preparePublishedCourse();
 
-        Course course1 = courseRepository.save(CourseFixture.createCourse(instructor));
-        Course course2 = courseRepository.save(CourseFixture.createCourse(instructor2));
-
-        assertThat(courseRepository.findByInstructor(instructor)).singleElement().isEqualTo(course1);
-        assertThat(courseRepository.findByInstructor(instructor2)).singleElement().isEqualTo(course2);
+        assertThat(courseRepository.findByInstructor(course1.getInstructor())).singleElement().isEqualTo(course1);
+        assertThat(courseRepository.findByInstructor(course2.getInstructor())).singleElement().isEqualTo(course2);
     }
 
     @Test
     void uniqueTitleAndInstructor() {
-        Member member2 = memberRepository.save(MemberFixture.createActiveMember());
-        Instructor instructor2 = instructorRepository.save(InstructorFixture.createActiveInstructor(member2));
+        Instructor instructor1 = prepareActiveInstructor();
+        Course course1 = prepareCourse(instructor1, "Hello Spring");
 
-        Course course = CourseFixture.createCourse(instructor, "Hell Spring");
-        courseRepository.save(course);
-
-        Course course2 = CourseFixture.createCourse(instructor2, "Hell Spring");
-        Course course3 = CourseFixture.createCourse(instructor, "Hell Spring");
-
-        assertThat(courseRepository.save(course2)).isEqualTo(course2);
-
-        assertThatThrownBy(() -> courseRepository.save(course3))
+        // 동일 instructor + 동일 title => Fail
+        assertThatThrownBy(() -> courseRepository.save(createCourse(instructor1, "Hello Spring")))
                 .isInstanceOf(DataIntegrityViolationException.class);
+
+        // 타 instructor + 동일 title => Ok
+        Instructor instructor2 = prepareActiveInstructor();
+
+        courseRepository.save(CourseFixture.createCourse(instructor2, "Hello Spring"));
     }
 
 }

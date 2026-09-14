@@ -19,7 +19,8 @@ class EnrollmentRepositoryTest extends BaseRepositoryTest {
 
     @Test
     void saveAndFindId() {
-        preparePublishedCourse();
+        Member member = prepareActiveMember();
+        Course course = preparePublishedCourse();
 
         Enrollment enrollment = enrollmentRepository.save(Enrollment.enroll(member, course));
 

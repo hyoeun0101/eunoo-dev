@@ -1,5 +1,7 @@
 package eunoospring.splearn.domain.member;
 
+import static org.instancio.Select.field;
+
 import eunoospring.splearn.application.member.provided.MemberRegisterRequest;
 import org.instancio.Instancio;
 import org.instancio.Select;
@@ -9,7 +11,7 @@ public class MemberFixture {
 
     public static MemberRegisterRequest createMemberRegisterRequest(String email) {
         return Instancio.of(MemberRegisterRequest.class)
-                .set(Select.field(MemberRegisterRequest::email), email)
+                .set(field(MemberRegisterRequest::email), email)
                 .create();
     }
 
@@ -17,12 +19,12 @@ public class MemberFixture {
         return createMemberRegisterRequest(Instancio.gen().net().email().get());
     }
 
-    public static MemberUpdateInfoRequest createMemberUpdateInfoRequest() {
-        return createMemberUpdateInfoRequest("hello11");
-    }
-
     public static MemberUpdateInfoRequest createMemberUpdateInfoRequest(String profileAddress) {
-        return new MemberUpdateInfoRequest("hellooo", profileAddress, "안녕하세요.");
+        return Instancio.of(MemberUpdateInfoRequest.class)
+                .generate(field(MemberUpdateInfoRequest::nickname), gen -> gen.string().minLength(5).maxLength(20))
+                .set(field(MemberUpdateInfoRequest::profileAddress), profileAddress)
+                .generate(field(MemberUpdateInfoRequest::introduction), gen -> gen.string().maxLength(100).nullable())
+                .create();
     }
 
     public static PasswordEncoder createPasswordEncoder() {

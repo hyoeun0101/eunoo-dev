@@ -19,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ApplicationServiceTest
 public class BaseApplicationServiceTest {
     @Autowired
-    protected Enroller enroller;
+    protected MemberRegister memberRegister;
+
+    @Autowired
+    protected InstructorApplication instructorApplication;
 
     @Autowired
     protected CourseCreator courseCreator;
@@ -28,15 +31,15 @@ public class BaseApplicationServiceTest {
     protected CoursePublisher coursePublisher;
 
     @Autowired
-    protected MemberRegister memberRegister;
+    protected Enroller enroller;
 
-    @Autowired
-    protected InstructorApplication instructorApplication;
+    protected Member prepareMember() {
+        return memberRegister.register(MemberFixture.createMemberRegisterRequest());
+    }
 
     protected Member prepareActiveMember() {
-        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        member = memberRegister.activate(member.getId());
-        return member;
+        Member member = prepareMember();
+        return memberRegister.activate(member.getId());
     }
 
     protected Instructor prepareInstructor() {
@@ -49,23 +52,19 @@ public class BaseApplicationServiceTest {
         Member member = prepareActiveMember();
 
         Instructor instructor = instructorApplication.apply(InstructorFixture.createInstructorApplyReqeust(member));
-        instructor = instructorApplication.approve(instructor.getId());
-        return instructor;
+        return instructorApplication.approve(instructor.getId());
     }
 
     protected Course prepareCourse() {
         Instructor instructor = prepareActiveInstructor();
         Course course = courseCreator.create(CourseFixture.createCourseCreateRequest(instructor.getId(), null));
-        course = courseCreator.updateInfo(course.getId(), CourseFixture.createCourseUpdateRequest(null));
-
-        return course;
+        return courseCreator.updateInfo(course.getId(), CourseFixture.createCourseUpdateRequest(null));
     }
 
     protected Course preparePublishedCourse() {
         Course course = prepareCourse();
         coursePublisher.submitForReview(course.getId());
-        course = coursePublisher.publish(course.getId());
-        return course;
+        return coursePublisher.publish(course.getId());
     }
 
     protected Enrollment prepareEnrollment() {

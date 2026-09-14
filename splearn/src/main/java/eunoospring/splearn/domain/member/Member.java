@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.metamodel.mapping.ordering.ast.FkDomainPathContinuation;
 
 @Entity
 @Getter
@@ -32,6 +31,11 @@ public class Member extends AbstractEntity {
 
     private MemberDetail detail;
 
+    /**
+     * MemberRegisterRequest 대신 MemberRegisterInfo로 변환한 이유:
+     * 도메인 계층의 독립성을 지키기 위해.
+     * request는 API의 요청을 받는 부분이고, info는 도메인 계층에서 필요한 데이터만 받음.
+     */
     public static Member register(MemberRegisterInfo registerInfo, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
