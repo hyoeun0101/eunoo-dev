@@ -7,12 +7,10 @@ import eunoospring.splearn.support.ApplicationServiceTest;
 import eunoospring.splearn.support.test.BaseApplicationServiceTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import tools.jackson.core.ObjectReadContext.Base;
 
 @ApplicationServiceTest
 @RequiredArgsConstructor
 class MemberAuthenticatorTest extends BaseApplicationServiceTest {
-    final MemberRegister memberRegister;
 
     final MemberAuthenticator memberAuthenticator;
 
@@ -20,8 +18,6 @@ class MemberAuthenticatorTest extends BaseApplicationServiceTest {
     void login() {
         MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(request).activate();
-
-
 
         var member = memberAuthenticator.login(new MemberLoginRequest(request.email(), request.password()));
     }
@@ -51,7 +47,6 @@ class MemberAuthenticatorTest extends BaseApplicationServiceTest {
 
         assertThatThrownBy(() -> memberAuthenticator.login(new MemberLoginRequest(request.email(), "wrongpassword")))
                 .isInstanceOf(LoginFailedException.class);
-
     }
 
 }

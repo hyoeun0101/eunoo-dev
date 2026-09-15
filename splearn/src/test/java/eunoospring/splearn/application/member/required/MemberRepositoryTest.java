@@ -1,18 +1,16 @@
 package eunoospring.splearn.application.member.required;
 
-import static eunoospring.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
 import eunoospring.splearn.domain.member.MemberStatus;
-import eunoospring.splearn.domain.member.MemberUpdateInfoRequest;
 import eunoospring.splearn.domain.member.Profile;
 import eunoospring.splearn.support.test.BaseRepositoryTest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,9 +34,10 @@ class MemberRepositoryTest extends BaseRepositoryTest {
 
     @Test
     void duplicateEmailFail() {
-        prepareActiveMember();
+        Member member1 = MemberFixture.createMember("eunoo@splearn.com");
+        memberRepository.save(member1);
+        Member member2 = MemberFixture.createMember("eunoo@splearn.com");
 
-        Member member2 = MemberFixture.createMember();
         assertThatThrownBy(() -> memberRepository.save(member2))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
@@ -46,31 +45,32 @@ class MemberRepositoryTest extends BaseRepositoryTest {
     @Test
     void findByProfile() {
         Member member = prepareActiveMember();
-        member.updateInfo(MemberFixture.createMemberUpdateInfoRequest("eunoo@profile"));
+        member.updateInfo(MemberFixture.createMemberUpdateInfoRequest("eunoo11"));
         memberRepository.save(member);
         em.flush();
         em.clear();
 
-        Optional<Member> found = memberRepository.findByProfile(new Profile("eunoo@profile"));
+        Optional<Member> found = memberRepository.findByProfile(new Profile("eunoo11"));
 
         assertThat(found).isPresent();
         assertThat(found.get()).isEqualTo(member);
-        assertThat(memberRepository.findByProfile(new Profile("jun@profile"))).isEmpty();
+        assertThat(memberRepository.findByProfile(new Profile("eunoo22"))).isEmpty();
     }
 
     @Test
     void duplicateProfileFail() {
         Member member1 = prepareActiveMember();
-        member1.updateInfo(MemberFixture.createMemberUpdateInfoRequest("eunoo@profile"));
+        member1.updateInfo(MemberFixture.createMemberUpdateInfoRequest("eunoo11"));
         memberRepository.save(member1);
         em.flush();
         em.clear();
 
         Member member2 = prepareActiveMember();
-        member2.updateInfo(MemberFixture.createMemberUpdateInfoRequest("eunoo@profile"));
+        member2.updateInfo(MemberFixture.createMemberUpdateInfoRequest("eunoo11"));
+        memberRepository.save(member2);
 
-        assertThatThrownBy(() -> memberRepository.save(member2))
-                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThatThrownBy(() -> em.flush())
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
 }

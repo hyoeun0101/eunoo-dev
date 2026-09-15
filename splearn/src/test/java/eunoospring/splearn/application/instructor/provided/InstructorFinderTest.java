@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import eunoospring.splearn.SplearnTestConfiguration;
 import eunoospring.splearn.domain.instructor.Instructor;
-import eunoospring.splearn.domain.instructor.InstructorFixture;
 import eunoospring.splearn.domain.instructor.InstructorStatus;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.support.test.BaseApplicationServiceTest;
@@ -44,18 +43,14 @@ class InstructorFinderTest extends BaseApplicationServiceTest {
 
     @Test
     void findByMember() {
-        Member member = prepareActiveMember();
-        Member member1 = member;
-        member1 = member1 == null ? prepareActiveMember() : member1;
-
-        Instructor instructor1 = instructorApplication.apply(InstructorFixture.createInstructorApplyReqeust(member1));
-        instructor1 = instructorApplication.approve(instructor1.getId());
-        Instructor instructor = instructor1;
+        Instructor instructor = prepareActiveInstructor();
         em.flush();
         em.clear();
 
-        assertThat(instructorFinder.findByMember(member)).get()
-                .extracting(Instructor::getId).isEqualTo(instructor.getId());
+        assertThat(instructorFinder.findByMember(instructor.getMember()))
+                .get()
+                .extracting(Instructor::getId)
+                .isEqualTo(instructor.getId());
     }
 
     @Test
