@@ -35,10 +35,18 @@ public class Section extends AbstractEntity {
         this.title = Objects.requireNonNull(title);
     }
 
-    public Lesson addLesson(String title) {
+    Lesson addLesson(String title) {
         Lesson lesson = new Lesson(this, title);
         lessons.add(lesson);
 
         return lesson;
+    }
+
+    void updateTitle(String title) {
+        this.title = title;
+    }
+
+    void updateLessonTitle(int lessonIndex, String title) {
+        this.lessons.get(lessonIndex).updateTitle(title);
     }
 }

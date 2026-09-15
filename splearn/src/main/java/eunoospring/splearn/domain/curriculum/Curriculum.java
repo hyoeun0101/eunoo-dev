@@ -44,8 +44,26 @@ public class Curriculum extends AbstractEntity {
     }
 
     public Lesson addLesson(int sectionIndex, String title) {
+        return sections.get(sectionIndex).addLesson(title);
+    }
 
+    public Section updateSectionTitle(int sectionIndex, String title) {
+        Section section = sections.get(sectionIndex);
+        section.updateTitle(title);
+        return section;
+    }
 
-        return null;
+    public void updateLessonTitle(int sectionIndex, int lessonIndex, String title) {
+        Section section = sections.get(sectionIndex);
+        section.updateLessonTitle(lessonIndex, title);
+    }
+
+    public void removeLesson(int sectionIndex, int lessonIndex) {
+
+    }
+
+    public List<Lesson> allLessons() {
+        return this.sections.stream().flatMap(section -> section.getLessons().stream())
+                .toList();
     }
 }

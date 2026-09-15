@@ -29,7 +29,7 @@ class EnrollmentRepositoryTest extends BaseRepositoryTest {
 
         assertThat(enrollment.getId()).isNotNull();
 
-        Enrollment found = enrollmentRepository.findById(enrollment.getId()).orElseThrow();
+        Enrollment found = enrollmentRepository.findById(enrollment. getId()).orElseThrow();
 
         assertThat(found).isEqualTo(enrollment);
     }

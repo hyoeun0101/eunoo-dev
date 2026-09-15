@@ -21,8 +21,12 @@ public class Lesson extends AbstractEntity {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Section section;
 
-    public Lesson(Section section, String title) {
-         this.section = section;
-        this.title = Objects.requireNonNull(title );
+    Lesson(Section section, String title) {
+        this.section = section;
+        this.title = Objects.requireNonNull(title);
+    }
+
+    void updateTitle(String title) {
+        this.title = Objects.requireNonNull(title);
     }
 }
