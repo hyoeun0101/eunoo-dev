@@ -49,4 +49,20 @@ public class Section extends AbstractEntity {
     void updateLessonTitle(int lessonIndex, String title) {
         this.lessons.get(lessonIndex).updateTitle(title);
     }
+
+    public Lesson removeLesson(int lessonIndex) {
+        return lessons.remove(lessonIndex);
+    }
+
+    public void moveAllLessonTo(Section target, int insertIndex) {
+        while(!this.lessons.isEmpty()) {
+            target.addLesson(insertIndex++, this.lessons.getFirst());
+            this.lessons.removeFirst();
+        }
+    }
+
+    public void addLesson(int index, Lesson lesson) {
+        lesson.moveTo(this);
+        lessons.add(index, lesson);
+    }
 }

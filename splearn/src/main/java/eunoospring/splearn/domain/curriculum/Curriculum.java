@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -59,11 +60,43 @@ public class Curriculum extends AbstractEntity {
     }
 
     public void removeLesson(int sectionIndex, int lessonIndex) {
-
+        sections.get(sectionIndex).removeLesson(lessonIndex);
     }
 
     public List<Lesson> allLessons() {
         return this.sections.stream().flatMap(section -> section.getLessons().stream())
                 .toList();
+    }
+
+    public void removeSection(int sectionIndex) {
+
+        Assert.state(this.sections.size() > 1, "마지막 남은 섹션은 삭제할 수 없습니다.");
+
+        Section removed = this.sections.remove(sectionIndex);
+
+        if (sectionIndex == 0) {
+            Section next = this.sections.get(0);
+            removed.moveAllLessonTo(next, 0);
+        }
+        else {
+            Section previous = this.sections.get(sectionIndex - 1);
+            removed.moveAllLessonTo(previous, previous.getLessons().size());
+        }
+    }
+
+    public void moveLesson(int fromSectionIndex, int fromLessonIndex, int toSectionIndex, int toLessonIndex) {
+
+        Section fromSection = this.sections.get(fromSectionIndex);
+        Section toSection = this.sections.get(toSectionIndex);
+
+        toSection.addLesson(toLessonIndex, fromSection.removeLesson(fromLessonIndex));
+    }
+
+    public void validate() {
+        if (this.sections.isEmpty()) throw new InvalidCurriculumException("최소한 하나의 섹션이 필요합니다.");
+
+        this.sections.forEach(section -> {
+            if (section.getLessons().isEmpty()) throw new InvalidCurriculumException("수업이 없는 섹션은 허용되지 않습니다.");
+        });
     }
 }
