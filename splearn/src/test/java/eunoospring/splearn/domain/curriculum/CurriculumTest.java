@@ -9,7 +9,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.course.CourseFixture;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 class CurriculumTest {
 
@@ -162,7 +164,6 @@ class CurriculumTest {
         assertThatThrownBy(() -> curriculum.removeSection(0)).isInstanceOf(IllegalStateException.class);
     }
 
-
     @Test
     void moveLesson() {
         Curriculum curriculum = CurriculumFixture.createCurriculum();
@@ -214,5 +215,77 @@ class CurriculumTest {
         assertThatThrownBy(curriculum::validate).isInstanceOf(InvalidCurriculumException.class);
     }
 
+    @Test
+    void firstLesson() {
+        Curriculum curriculum = CurriculumFixture.createCurriculum();
+        curriculum.addSection("S0");
 
+        assertThat(curriculum.firstLesson()).isEmpty();
+
+        Lesson l0 = curriculum.addLesson(0, "L0");
+        Lesson l1 = curriculum.addLesson(0, "L1");
+
+        assertThat(curriculum.firstLesson().orElseThrow()).isEqualTo(l0);
+    }
+
+    @Test
+    void nextLesson() {
+        Curriculum curriculum = CurriculumFixture.createCurriculum();
+        curriculum.addSection("S0");
+        curriculum.addSection("S1");
+
+        Lesson l0 = curriculum.addLesson(0, "L0");
+        Lesson l1 = curriculum.addLesson(0, "L1");
+        Lesson l2 = curriculum.addLesson(0, "L2");
+
+        Optional<Lesson> nextOfL0 = curriculum.nextLesson(l0);
+        Optional<Lesson> nextOfL1 = curriculum.nextLesson(l1);
+        Optional<Lesson> nextOfL2 = curriculum.nextLesson(l2);
+
+        assertThat(nextOfL0.orElseThrow()).isEqualTo(l1);
+        assertThat(nextOfL1.orElseThrow()).isEqualTo(l2);
+        assertThat(nextOfL2).isEmpty();
+    }
+
+    @Test
+    void nextWithId() {
+        Curriculum curriculum = CurriculumFixture.createCurriculum();
+        curriculum.addSection("S0");
+        curriculum.addSection("S1");
+        Lesson l0 = curriculum.addLesson(0, "L0");
+        assignId(l0, 10L);
+        Lesson l1 = curriculum.addLesson(0, "L1");
+        assignId(l1, 11L);
+        Lesson l2 = curriculum.addLesson(0, "L2");
+        assignId(l2, 12L);
+
+        Optional<Lesson> nextOfL0 = curriculum.nextLesson(10L);
+        Optional<Lesson> nextOfL1 = curriculum.nextLesson(11L);
+        Optional<Lesson> nextOfL2 = curriculum.nextLesson(12L);
+
+        assertThat(nextOfL0.orElseThrow()).isEqualTo(l1);
+        assertThat(nextOfL1.orElseThrow()).isEqualTo(l2);
+        assertThat(nextOfL2).isEmpty();
+
+        assertThatThrownBy(() -> curriculum.nextLesson(999L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private void assignId(Lesson lesson, Long id) {
+        ReflectionTestUtils.setField(lesson, "id", id);
+    }
+
+    @Test
+    void unmodifiableSectionsAndLessons() {
+        Curriculum curriculum = CurriculumFixture.createCurriculum();
+        Section s0 = curriculum.addSection("S0");
+        curriculum.addLesson(0, "L0");
+
+        assertThatThrownBy(() -> curriculum.getSections().add(new Section(curriculum, "Fail")))
+                .isInstanceOf(UnsupportedOperationException.class);
+
+        Section section = curriculum.getSections().getFirst();
+        assertThatThrownBy(() -> section.getLessons().add(new Lesson(section, "Fail")))
+                .isInstanceOf(UnsupportedOperationException.class);
+    }
 }

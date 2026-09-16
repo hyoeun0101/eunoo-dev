@@ -3,11 +3,13 @@ package eunoospring.splearn.domain.curriculum;
 
 import eunoospring.splearn.domain.AbstractEntity;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import lombok.AccessLevel;
@@ -17,18 +19,23 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@ToString(callSuper = true, exclude = {})
+@ToString(callSuper = true, exclude = {"curriculum", "lessons"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Section extends AbstractEntity {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Curriculum curriculum;
 
+    @Column(length = 200)
     private String title;
 
     @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true )
+    @Getter(AccessLevel.NONE)
     private List<Lesson> lessons = new ArrayList<>();
 
+    public List<Lesson> getLessons() {
+        return Collections.unmodifiableList(lessons);
+    }
 
     Section(Curriculum curriculum, String title) {
         this.curriculum = curriculum;

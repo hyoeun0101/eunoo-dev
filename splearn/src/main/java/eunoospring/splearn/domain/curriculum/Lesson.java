@@ -1,6 +1,7 @@
 package eunoospring.splearn.domain.curriculum;
 
 import eunoospring.splearn.domain.AbstractEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
@@ -12,10 +13,11 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "section")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lesson extends AbstractEntity {
 
+    @Column(length = 200)
     private String title;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
