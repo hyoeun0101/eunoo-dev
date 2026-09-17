@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,8 @@ public class Section extends AbstractEntity {
     @Column(length = 200)
     private String title;
 
-    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
+    @OrderColumn(name = "lesson_order")
     @Getter(AccessLevel.NONE)
     private List<Lesson> lessons = new ArrayList<>();
 

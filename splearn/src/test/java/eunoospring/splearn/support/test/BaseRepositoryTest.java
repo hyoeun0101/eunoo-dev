@@ -15,6 +15,7 @@ import eunoospring.splearn.domain.member.MemberFixture;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.transaction.support.ResourceTransactionManager;
 
 @DataJpaTest
 public class BaseRepositoryTest {
@@ -41,20 +42,22 @@ public class BaseRepositoryTest {
 
     protected Instructor prepareActiveInstructor() {
         Member member = prepareActiveMember();
-        Instructor instructor = InstructorFixture.createActiveInstructor(member);
-        return instructorRepository.save(instructor);
+        return instructorRepository.save(InstructorFixture.createActiveInstructor(member));
+    }
+
+    protected Course prepareCourse() {
+        Instructor instructor = prepareActiveInstructor();
+        return prepareCourse(instructor, null);
     }
 
     protected Course prepareCourse(Instructor instructor, String title) {
-        Course course = CourseFixture.createCourse(instructor, title);
-        return courseRepository.save(course);
+        return courseRepository.save(CourseFixture.createCourse(instructor, title));
     }
 
     protected Course preparePublishedCourse() {
         Instructor instructor = prepareActiveInstructor();
 
-        Course course = CourseFixture.createPublishedCourse(instructor);
-        return courseRepository.save(course);
+        return courseRepository.save(CourseFixture.createPublishedCourse(instructor));
     }
 
     protected Enrollment prepareEnrollment(Member member, Course course) {

@@ -23,23 +23,23 @@ import org.springframework.util.Assert;
 
 @Entity
 @Getter
-@ToString(callSuper = true, exclude = {"sections"})
+@ToString(callSuper = true, exclude = {"course","sections"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Curriculum extends AbstractEntity {
 
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private Course course;
 
-    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL)
     @Getter(AccessLevel.NONE)
     private List<Section> sections = new ArrayList<>();
 
-    public List<Section> getSections() {
-        return Collections.unmodifiableList(sections);
-    }
-
     public Curriculum(Course course) {
         this.course = Objects.requireNonNull(course);
+    }
+
+    public List<Section> getSections() {
+        return Collections.unmodifiableList(sections);
     }
 
     public Section addSection(String title) {
