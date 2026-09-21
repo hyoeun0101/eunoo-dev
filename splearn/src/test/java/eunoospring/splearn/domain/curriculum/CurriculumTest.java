@@ -2,7 +2,6 @@ package eunoospring.splearn.domain.curriculum;
 
 import static eunoospring.splearn.domain.curriculum.LessonContent.lesson;
 import static eunoospring.splearn.domain.curriculum.SectionContent.section;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

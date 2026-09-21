@@ -1,10 +1,10 @@
 package eunoospring.splearn.application.curriculum.provided;
 
+import eunoospring.splearn.application.course.required.CurriculumCreator;
 import eunoospring.splearn.domain.curriculum.Curriculum;
 import eunoospring.splearn.domain.curriculum.InvalidCurriculumException;
 
-public interface CurriculumCoordinator {
-    Curriculum create(Long courseId);
+public interface CurriculumCoordinator extends CurriculumCreator {
 
     Curriculum addSection(Long curriculumId, String title);
 
@@ -12,9 +12,9 @@ public interface CurriculumCoordinator {
 
     Curriculum addLesson(Long curriculumId, int sectionIndex, String title);
 
-    Curriculum updateSectionTitle(Long curriculumId, int sectionIndx, String title);
+    Curriculum updateSectionTitle(Long curriculumId, int sectionIndex, String title);
 
-    Curriculum updateLessonTitle(Long curriculumId, int sectoinIndex, int lessonIndex, String title);
+    Curriculum updateLessonTitle(Long curriculumId, int sectionIndex, int lessonIndex, String title);
 
     Curriculum removeSection(Long curriculumId, int sectionIndex);
 

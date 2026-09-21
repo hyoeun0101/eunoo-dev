@@ -52,6 +52,7 @@ class CurriculumRepositoryTest extends BaseRepositoryTest {
 
     private Curriculum saveCurriculum() {
         Curriculum curriculum = new Curriculum(this.prepareCourse());
+        System.out.println("=========prepare=========");
 
         curriculum = curriculumRepository.save(curriculum);
         curriculum.addSection("S0");
@@ -75,9 +76,20 @@ class CurriculumRepositoryTest extends BaseRepositoryTest {
      * @return
      */
     private Statistics prepareStatistics() {
-        Statistics statistics = em.getEntityManagerFactory().unwrap(SessionFactory.class).getStatistics();
+        Statistics statistics = em.getEntityManagerFactory()
+                .unwrap(SessionFactory.class)
+                .getStatistics();
         statistics.setStatisticsEnabled(true);
         statistics.clear();
         return statistics;
+    }
+
+    @Test
+    void removeLesson() {
+        Long curriculumId = saveCurriculum().getId();
+
+        curriculumRepository.findWithSectionById(curriculumId);
+
+
     }
 }

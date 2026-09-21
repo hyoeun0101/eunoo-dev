@@ -7,6 +7,8 @@ import eunoospring.splearn.application.course.provided.CoursePublisher;
 import eunoospring.splearn.application.course.provided.CourseUpdateRequest;
 import eunoospring.splearn.application.course.provided.CourseValidator;
 import eunoospring.splearn.application.course.required.CourseRepository;
+import eunoospring.splearn.application.course.required.CurriculumCreator;
+import eunoospring.splearn.application.curriculum.provided.CurriculumCoordinator;
 import eunoospring.splearn.application.instructor.provided.InstructorFinder;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.instructor.Instructor;
@@ -21,6 +23,7 @@ public class CourseModifyService implements CourseCreator, CoursePublisher {
     private final InstructorFinder instructorFinder;
     private final CourseValidator courseValidator;
     private final CourseFinder courseFinder;
+    private final CurriculumCreator curriculumCreator;
 
     @Override
     public Course create(CourseCreateRequest request) throws ValidationException {
@@ -29,7 +32,11 @@ public class CourseModifyService implements CourseCreator, CoursePublisher {
         courseValidator.validateForCreate(instructor, request);
 
         Course course = new Course(instructor, request.title(), request.description());
-        return courseRepository.save(course);
+        course = courseRepository.save(course);
+
+        curriculumCreator.createCurriculum(course);
+
+        return course;
     }
 
     @Override
