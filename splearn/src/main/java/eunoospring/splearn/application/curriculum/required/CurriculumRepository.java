@@ -10,6 +10,7 @@ public interface CurriculumRepository extends Repository<Curriculum, Long> {
 
     Optional<Curriculum> findById(Long curriculumId);
 
+    // fetch join 사용하기
     @EntityGraph(attributePaths = {"sections", "sections.lessons"})
     Optional<Curriculum> findWithSectionById(Long curriculumId);
 

@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderColumn;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +20,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -31,6 +31,7 @@ public class Curriculum extends AbstractEntity {
     private Course course;
 
     @OneToMany(mappedBy = "curriculum", cascade = CascadeType.ALL)
+    @OrderColumn(name = "section_order")
     @Getter(AccessLevel.NONE)
     private List<Section> sections = new ArrayList<>();
 
@@ -69,8 +70,8 @@ public class Curriculum extends AbstractEntity {
         section.updateLessonTitle(lessonIndex, title);
     }
 
-    public void removeLesson(int sectionIndex, int lessonIndex) {
-        sections.get(sectionIndex).removeLesson(lessonIndex);
+    public Lesson removeLesson(int sectionIndex, int lessonIndex) {
+        return sections.get(sectionIndex).removeLesson(lessonIndex);
     }
 
     public List<Lesson> allLessons() {
@@ -78,7 +79,7 @@ public class Curriculum extends AbstractEntity {
                 .toList();
     }
 
-    public void removeSection(int sectionIndex) {
+    public Section removeSection(int sectionIndex) {
 
         state(this.sections.size() > 1, "마지막 남은 섹션은 삭제할 수 없습니다.");
 
@@ -92,6 +93,7 @@ public class Curriculum extends AbstractEntity {
             Section previous = this.sections.get(sectionIndex - 1);
             removed.moveAllLessonTo(previous, previous.getLessons().size());
         }
+        return removed;
     }
 
     public void moveLesson(int fromSectionIndex, int fromLessonIndex, int toSectionIndex, int toLessonIndex) {

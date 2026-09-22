@@ -8,7 +8,6 @@ import eunoospring.splearn.application.course.provided.CourseUpdateRequest;
 import eunoospring.splearn.application.course.provided.CourseValidator;
 import eunoospring.splearn.application.course.required.CourseRepository;
 import eunoospring.splearn.application.course.required.CurriculumCreator;
-import eunoospring.splearn.application.curriculum.provided.CurriculumCoordinator;
 import eunoospring.splearn.application.instructor.provided.InstructorFinder;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.instructor.Instructor;

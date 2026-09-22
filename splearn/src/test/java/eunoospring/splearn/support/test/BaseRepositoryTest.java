@@ -13,9 +13,10 @@ import eunoospring.splearn.domain.instructor.InstructorFixture;
 import eunoospring.splearn.domain.member.Member;
 import eunoospring.splearn.domain.member.MemberFixture;
 import jakarta.persistence.EntityManager;
+import org.hibernate.SessionFactory;
+import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.transaction.support.ResourceTransactionManager;
 
 @DataJpaTest
 public class BaseRepositoryTest {
@@ -63,5 +64,16 @@ public class BaseRepositoryTest {
     protected Enrollment prepareEnrollment(Member member, Course course) {
         Enrollment enrollment = EnrollmentFixture.createEnrollment(member, course);
         return enrollmentRepository.save(enrollment);
+    }
+
+    /**
+     * 쿼리 실행 횟수 세기
+     * 쿼리 최적화할 때, N+1 문제 해결할 때 사용
+     */
+    protected Statistics prepareStatistics() {
+        Statistics statistics = em.getEntityManagerFactory().unwrap(SessionFactory.class).getStatistics();
+        statistics.setStatisticsEnabled(true);
+        statistics.clear();
+        return statistics;
     }
 }

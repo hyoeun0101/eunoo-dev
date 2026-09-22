@@ -4,7 +4,9 @@ import eunoospring.splearn.application.course.provided.CourseCreateRequest;
 import eunoospring.splearn.application.course.provided.CourseUpdateRequest;
 import eunoospring.splearn.application.course.provided.CourseValidator;
 import eunoospring.splearn.application.course.required.CourseRepository;
+import eunoospring.splearn.application.course.required.CurriculumValidator;
 import eunoospring.splearn.domain.course.Course;
+import eunoospring.splearn.domain.curriculum.InvalidCurriculumException;
 import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.support.ApplicationService;
 import eunoospring.splearn.support.exception.ValidationException;
@@ -20,6 +22,7 @@ import org.springframework.util.ObjectUtils;
 public class CourseValidationService implements CourseValidator {
 
     private final CourseRepository courseRepository;
+    private final CurriculumValidator curriculumValidator;
 
     @Override
     public void validateForCreate(Instructor instructor, CourseCreateRequest createRequest) throws ValidationException {
@@ -60,12 +63,32 @@ public class CourseValidationService implements CourseValidator {
 
     @Override
     public void validateForReview(Course course) {
+        List<String> errors = new ArrayList<>();
 
+        checkCurriculum(course, errors);
+
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors);
+        }
+    }
+
+    private void checkCurriculum(Course course, List<String> errors) {
+        try {
+            curriculumValidator.validate(course.getId());
+        } catch (InvalidCurriculumException e) {
+            errors.add(e.getMessage());
+        }
     }
 
     @Override
     public void validateForPublish(Course course) {
+        List<String> errors = new ArrayList<>();
 
+        checkCurriculum(course, errors);
+
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors);
+        }
     }
 
     @Override
