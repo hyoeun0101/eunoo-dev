@@ -1,12 +1,10 @@
 package eunoospring.splearn.application.course.provided;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
+import eunoospring.splearn.application.curriculum.provided.CurriculumFinder;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.course.CourseFixture;
-import eunoospring.splearn.domain.course.CourseUpdateInfo;
 import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.support.ApplicationServiceTest;
 import eunoospring.splearn.support.test.BaseApplicationServiceTest;
@@ -17,6 +15,7 @@ import org.junit.jupiter.api.Test;
 @RequiredArgsConstructor
 class CourseCreatorTest extends BaseApplicationServiceTest {
     final CourseCreator courseCreator;
+    final CurriculumFinder curriculumFinder;
 
     @Test
     void create() {
@@ -26,6 +25,9 @@ class CourseCreatorTest extends BaseApplicationServiceTest {
 
         assertThat(course.getInstructor().getId()).isEqualTo(instructor.getId());
         assertThat(course.getTitle()).isEqualTo("Spring");
+
+        // Course 생성될 때, Curriculum도 생성됐는지 확인
+        assertThat(curriculumFinder.findByCourse(course.getId())).isNotNull();
     }
 
     @Test

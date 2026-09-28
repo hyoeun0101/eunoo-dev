@@ -1,13 +1,12 @@
 package eunoospring.splearn.application.course.provided;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.in;
 
 import eunoospring.splearn.application.course.required.CourseRepository;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.course.CourseFixture;
+import eunoospring.splearn.domain.curriculum.Curriculum;
 import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.support.ApplicationServiceTest;
 import eunoospring.splearn.support.exception.ValidationException;
@@ -44,7 +43,6 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
         courseValidator.validateForCreate(instructor2, new CourseCreateRequest(instructor2.getId(), "Spring", null));
     }
 
-
     @Test
     void titleDuplicationForUpdate() {
         Instructor instructor = prepareActiveInstructor();
@@ -63,5 +61,26 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
                     assertThat(e.getErrors()).hasSize(1);
                 });
 
+    }
+
+    @Test
+    void submitForReviewFailInvalidCurriculum() {
+        Course course = prepareCourse();
+        Curriculum curriculum = prepareCurriculumSectionsAndLessons(course);
+        curriculum.removeLesson(2, 0);
+
+        assertThatThrownBy(() -> coursePublisher.submitForReview(course.getId()))
+                .isInstanceOf(ValidationException.class);
+    }
+
+    @Test
+    void publishFail() {
+        Course course = prepareCourse();
+        Curriculum curriculum = prepareCurriculumSectionsAndLessons(course);
+        coursePublisher.submitForReview(course.getId());
+        curriculum.removeLesson(2, 0);
+
+        assertThatThrownBy(() -> coursePublisher.publish(course.getId()))
+                .isInstanceOf(ValidationException.class);
     }
 }

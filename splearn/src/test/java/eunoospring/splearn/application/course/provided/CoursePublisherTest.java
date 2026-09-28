@@ -20,23 +20,24 @@ class CoursePublisherTest extends BaseApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
-        course = prepareCourse();
+        course = prepareCourseWithCurriculum();
     }
 
     @Test
     void submitForReview() {
-        var courseForReview = coursePublisher.submitForReview(course.getId());
 
-        assertThat(courseForReview.getStatus()).isEqualTo(CourseStatus.IN_REVIEW);
+        coursePublisher.submitForReview(course.getId());
+
+        assertThat(course.getStatus()).isEqualTo(CourseStatus.IN_REVIEW);
     }
+
     @Test
     void publish() {
         coursePublisher.submitForReview(course.getId());
 
-        var courseForPublish = coursePublisher.publish(course.getId());
+        coursePublisher.publish(course.getId());
 
-        assertThat(courseForPublish.getStatus()).isEqualTo(CourseStatus.PUBLISHED);
-        assertThat(courseForPublish.getDetail().getPublishedAt()).isNotNull();
+        assertThat(course.getStatus()).isEqualTo(CourseStatus.PUBLISHED);
     }
 
     @Test

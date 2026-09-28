@@ -2,12 +2,14 @@ package eunoospring.splearn.support.test;
 
 import eunoospring.splearn.application.course.provided.CourseCreator;
 import eunoospring.splearn.application.course.provided.CoursePublisher;
+import eunoospring.splearn.application.curriculum.provided.CurriculumFinder;
 import eunoospring.splearn.application.enrollment.provided.EnrollRequest;
 import eunoospring.splearn.application.enrollment.provided.Enroller;
 import eunoospring.splearn.application.instructor.provided.InstructorApplication;
 import eunoospring.splearn.application.member.provided.MemberRegister;
 import eunoospring.splearn.domain.course.Course;
 import eunoospring.splearn.domain.course.CourseFixture;
+import eunoospring.splearn.domain.curriculum.Curriculum;
 import eunoospring.splearn.domain.enrollment.Enrollment;
 import eunoospring.splearn.domain.instructor.Instructor;
 import eunoospring.splearn.domain.instructor.InstructorFixture;
@@ -32,6 +34,8 @@ public class BaseApplicationServiceTest {
 
     @Autowired
     protected Enroller enroller;
+    @Autowired
+    private CurriculumFinder curriculumFinder;
 
     protected Member prepareMember() {
         return memberRegister.register(MemberFixture.createMemberRegisterRequest());
@@ -62,7 +66,7 @@ public class BaseApplicationServiceTest {
     }
 
     protected Course preparePublishedCourse() {
-        Course course = prepareCourse();
+        Course course = prepareCourseWithCurriculum();
         coursePublisher.submitForReview(course.getId());
         return coursePublisher.publish(course.getId());
     }
@@ -72,5 +76,29 @@ public class BaseApplicationServiceTest {
         Course course = preparePublishedCourse();
 
         return enroller.enroll(new EnrollRequest(member.getId(), course.getId()));
+    }
+
+    protected Curriculum prepareCurriculumSectionsAndLessons(Course course) {
+        Curriculum curriculum = curriculumFinder.findByCourse(course.getId());
+
+        curriculum.addSection("S1");
+        curriculum.addLesson(0, "L1");
+        curriculum.addLesson(0, "L2");
+
+        curriculum.addSection("S2");
+        curriculum.addLesson(1, "L3");
+        curriculum.addLesson(1, "L4");
+
+        curriculum.addSection("S3");
+        curriculum.addLesson(2, "L5");
+
+        return curriculum;
+    }
+
+    protected Course prepareCourseWithCurriculum() {
+        Course course = prepareCourse();
+        prepareCurriculumSectionsAndLessons(course);
+
+        return course;
     }
 }
