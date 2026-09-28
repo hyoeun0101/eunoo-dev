@@ -18,11 +18,11 @@ public class AiRunner implements CommandLineRunner {
     // prompt -> user/system -> call/stream -> content/entity
     @Override
     public void run(String... args) throws Exception {
-        String answer = chatClient.prompt()
-                .user("Spring AI를 한 문장으로 정의해줘.")
-                .call()
-                .content();
-
-        System.out.println("answer=" + answer);
+//        String answer = chatClient.prompt()
+//                .user("Spring AI를 한 문장으로 정의해줘.")
+//                .call()
+//                .content();
+//
+//        System.out.println("answer=" + answer);
     }
 }

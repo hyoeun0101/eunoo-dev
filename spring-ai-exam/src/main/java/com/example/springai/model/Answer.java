@@ -1,4 +1,4 @@
 package com.example.springai.model;
 
-public record Answer() {
+public record Answer(String answer) {
 }
