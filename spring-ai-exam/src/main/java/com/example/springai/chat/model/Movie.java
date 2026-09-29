@@ -1,4 +1,4 @@
-package com.example.springai.model;
+package com.example.springai.chat.model;
 
 public record Movie(
         String title,

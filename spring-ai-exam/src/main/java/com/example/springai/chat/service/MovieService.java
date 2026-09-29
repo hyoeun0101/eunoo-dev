@@ -1,6 +1,6 @@
-package com.example.springai.services;
+package com.example.springai.chat.service;
 
-import com.example.springai.model.Movie;
+import com.example.springai.chat.model.Movie;
 import java.util.List;
 
 public interface MovieService {

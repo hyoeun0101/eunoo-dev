@@ -1,7 +1,7 @@
-package com.example.springai.services;
+package com.example.springai.chat.service;
 
-import com.example.springai.model.Answer;
-import com.example.springai.model.Question;
+import com.example.springai.chat.model.Answer;
+import com.example.springai.chat.model.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;

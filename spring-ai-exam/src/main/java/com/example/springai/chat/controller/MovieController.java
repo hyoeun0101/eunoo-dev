@@ -1,7 +1,7 @@
-package com.example.springai.controllers;
+package com.example.springai.chat.controller;
 
-import com.example.springai.model.Movie;
-import com.example.springai.services.MovieService;
+import com.example.springai.chat.model.Movie;
+import com.example.springai.chat.service.MovieService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

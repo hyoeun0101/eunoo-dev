@@ -3,8 +3,9 @@ package com.example.springai.controllers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.example.springai.model.Movie;
-import com.example.springai.services.MovieService;
+import com.example.springai.chat.controller.MovieController;
+import com.example.springai.chat.model.Movie;
+import com.example.springai.chat.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;

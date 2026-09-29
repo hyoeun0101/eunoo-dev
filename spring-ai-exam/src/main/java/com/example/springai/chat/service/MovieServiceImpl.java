@@ -1,8 +1,7 @@
-package com.example.springai.services;
+package com.example.springai.chat.service;
 
-import com.example.springai.model.Movie;
+import com.example.springai.chat.model.Movie;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.core.ParameterizedTypeReference;
